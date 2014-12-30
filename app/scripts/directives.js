@@ -24,6 +24,7 @@ angular.module('listItApp')
         }
 
         function updateList () {
+          root.innerHTML = scope.markupSrc;
           var childRef = root.getElementsByTagName('tbody')[0].children;
           var filteredRoot = document.createDocumentFragment();
           var regex = new RegExp(scope.filterRegex, 'i');

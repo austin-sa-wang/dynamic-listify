@@ -31,3 +31,7 @@ angular
         redirectTo: '/'
       });
   });
+
+angular.element(document).ready(function() {
+  angular.bootstrap(document, ['listItApp']);
+});

@@ -17,20 +17,9 @@ angular.module('listItApp')
 
     $scope.markupSrc;
 
-    $scope.newToDo = '';
-
-    $scope.addItem = function () {
-      $scope.awesomeThings.push($scope.newTodo);
-    };
-
-    $scope.extra = '';
-    $scope.changeTemplate = function () {
-      $scope.extra = $scope.extra + "<p>allo' </p>";
-    };
-
     $scope.srcURL = 'bindingofisaacrebirth.gamepedia.com/Items';
 
-    $scope.filterRegex = 'speed';
+    $scope.filterRegex = '';
 
     $scope.proceed = function () {
       var corsProxySegment = 'http://www.corsproxy.com/';
@@ -39,18 +28,9 @@ angular.module('listItApp')
 
       var url = corsProxySegment + urlFieldSegment;
       url = '/sample.html';
-      console.log(url);
       $.get(url, function(response) {
-        composeNewPage(response);
+        $scope.markupSrc = response;
+        $scope.$digest();
       });
-    }
-
-    function composeNewPage (source) {
-      $scope.markupSrc = source;
-      console.log("Done fetching" + $scope.itemTemplate);
-      var list = source.split('\n');
-      $scope.awesomeThings = list;
-      console.log(list.length);
-      $scope.$digest();
     }
   });

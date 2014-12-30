@@ -5,7 +5,8 @@ angular.module('listItApp')
 .directive('myCompiler', ['$compile', function ($compile) {
     return {
       link: function ( scope, element, attrs ) {
-        scope.$watch('awesomeThings', function(newValue, oldValue) {
+        scope.$watch('markupSrc', function(newValue, oldValue) {
+          setSource();
           updateList();
         });
 
@@ -13,13 +14,17 @@ angular.module('listItApp')
           updateList();
         });
 
-        function updateList () {
-          var root = document.createDocumentFragment();
-          var container = document.createElement('div');
-          root.appendChild(container);
-          container.innerHTML = scope.markupSrc;
+        var root;
 
-          var childRef = container.getElementsByTagName('tbody')[0].children;
+        function setSource () {
+          var tmp = document.createDocumentFragment();
+          root = document.createElement('div');
+          tmp.appendChild(root);
+          root.innerHTML = scope.markupSrc;
+        }
+
+        function updateList () {
+          var childRef = root.getElementsByTagName('tbody')[0].children;
           var filteredRoot = document.createDocumentFragment();
           var regex = new RegExp(scope.filterRegex, 'i');
           var tmp;

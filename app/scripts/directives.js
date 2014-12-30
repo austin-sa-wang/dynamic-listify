@@ -5,19 +5,33 @@ angular.module('listItApp')
 .directive('myCompiler', ['$compile', function ($compile) {
     return {
       link: function ( scope, element, attrs ) {
-        console.log(scope);
-        console.log('woooohoooo' + scope.awesomeThings);
-
-        scope.$watch('itemTemplate', function(newValue, oldValue) {
-          console.log('$watch triggered. Value changed from ' + oldValue + ' to ' + newValue);
-          updateList(newValue);
+        scope.$watch('awesomeThings', function(newValue, oldValue) {
+          updateList();
         });
 
-        function updateList (template) {
-          var el = $compile( template )( scope );
-          console.log(el);
-          element.html("");
-          element.append( el );
+        scope.$watch('filterRegex', function(newValue, oldValue) {
+          updateList();
+        });
+
+        function updateList () {
+          var root = document.createDocumentFragment();
+          var container = document.createElement('div');
+          root.appendChild(container);
+          container.innerHTML = scope.markupSrc;
+
+          var childRef = container.getElementsByTagName('tbody')[0].children;
+          var filteredRoot = document.createDocumentFragment();
+          var regex = new RegExp(scope.filterRegex, 'i');
+          var tmp;
+          for (var i = 0; i < childRef.length; i++) {
+            tmp = childRef[i];
+            if (regex.exec(tmp.innerText)) {
+              filteredRoot.appendChild(tmp);
+            }
+          }
+
+          element.html('');
+          element.append(filteredRoot);
         }
       }
     };

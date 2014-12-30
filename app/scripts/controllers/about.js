@@ -15,6 +15,8 @@ angular.module('listItApp')
       'Karma'
     ];
 
+    $scope.markupSrc;
+
     $scope.newToDo = '';
 
     $scope.addItem = function () {
@@ -28,7 +30,7 @@ angular.module('listItApp')
 
     $scope.srcURL = 'bindingofisaacrebirth.gamepedia.com/Items';
 
-    $scope.itemTemplate = 'unintialized';
+    $scope.filterRegex = 'speed';
 
     $scope.proceed = function () {
       var corsProxySegment = 'http://www.corsproxy.com/';
@@ -44,12 +46,11 @@ angular.module('listItApp')
     }
 
     function composeNewPage (source) {
+      $scope.markupSrc = source;
       console.log("Done fetching" + $scope.itemTemplate);
-      console.log(source.length);
       var list = source.split('\n');
       $scope.awesomeThings = list;
       console.log(list.length);
-      $scope.itemTemplate ='<div ng-repeat="item in awesomeThings">{{item}}</div>' ;
       $scope.$digest();
     }
   });

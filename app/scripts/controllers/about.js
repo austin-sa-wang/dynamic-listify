@@ -1,4 +1,5 @@
 'use strict';
+/*global $:false */
 
 /**
  * @ngdoc function
@@ -15,7 +16,7 @@ angular.module('listItApp')
       'Karma'
     ];
 
-    $scope.markupSrc;
+    $scope.markupSrc = '';
 
     $scope.srcURL = 'bindingofisaacrebirth.gamepedia.com/Items';
 
@@ -27,10 +28,10 @@ angular.module('listItApp')
       var urlFieldSegment = urlField.replace('http://', '');
 
       var url = corsProxySegment + urlFieldSegment;
-      url = '/sample.html';
+      url = 'sample.html';
       $.get(url, function(response) {
         $scope.markupSrc = response;
         $scope.$digest();
       });
-    }
+    };
   });

@@ -2,15 +2,15 @@
 
 /* Directives */
 angular.module('listItApp')
-.directive('myCompiler', ['$compile', function ($compile) {
+.directive('myCompiler', function () {
     return {
-      link: function ( scope, element, attrs ) {
-        scope.$watch('markupSrc', function(newValue, oldValue) {
+      link: function ( scope, element ) {
+        scope.$watch('markupSrc', function () {
           setSource();
           updateList();
         });
 
-        scope.$watch('filterRegex', function(newValue, oldValue) {
+        scope.$watch('filterRegex', function () {
           updateList();
         });
 
@@ -41,4 +41,4 @@ angular.module('listItApp')
         }
       }
     };
-  }]);
+  });

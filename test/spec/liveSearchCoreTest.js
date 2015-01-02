@@ -3,7 +3,7 @@
 describe('Controller: MainCtrl', function () {
 
   // load the controller's module
-  beforeEach(module('listItApp'));
+  beforeEach(module('LiveSearchApp'));
   beforeEach(module('LiveSearchCore'));
 
   var ctrl,

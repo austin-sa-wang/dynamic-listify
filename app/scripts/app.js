@@ -1,5 +1,4 @@
 'use strict';
-/*global $:false */
 
 /**
  * @ngdoc overview
@@ -12,5 +11,5 @@
 angular
   .module('LiveSearchApp', [
     'LiveSearchCore'
-  ])
+  ]);
 

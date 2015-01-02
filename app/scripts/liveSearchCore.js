@@ -20,8 +20,8 @@ angular
     function proxyUrl(srcUrl) {
       var proxySegment = 'http://www.corsproxy.com/';
       var srcURLSegment = srcUrl.replace('http://', '');
-      return 'sample.html';
-      //return proxySegment + srcURLSegment;
+      //return 'sample.html';
+      return proxySegment + srcURLSegment;
     }
   })
   .directive('myCompiler', function () {
@@ -39,7 +39,7 @@ angular
         var root = document.createElement('div');
         document.createDocumentFragment().appendChild(root);
 
-        function setMarkup(markup) {
+        function setMarkup() {
           root.innerHTML = scope.srcMarkup;
         }
 

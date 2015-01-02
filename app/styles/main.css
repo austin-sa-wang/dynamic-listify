@@ -1,3 +1,22 @@
+div[my-compiler] {
+  margin-top: 30px;
+}
+
+#warning {
+  font-size: 1.4em;
+  border: 2px solid black;
+  background-color: #219161;
+  padding: 4px;
+}
+
+#warning a {
+  color: #333333;
+  text-decoration: underline;
+}
+
+/*******************************************
+ * Yeoman Generated
+ ******************************************/
 /* Space out content a bit */
 body {
   padding-top: 20px;

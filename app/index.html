@@ -2,7 +2,7 @@
 <html class="no-js">
   <head>
     <meta charset="utf-8">
-    <title></title>
+    <title>Live Search</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
@@ -15,29 +15,36 @@
     <link rel="stylesheet" href="styles/main.css">
     <!-- endbuild -->
   </head>
-  <body>
+  <body ng-app="LiveSearchApp">
     <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 
     <!-- Add your site or application content here -->
     <div class="container">
-      <div class="header">
-        <ul class="nav nav-pills pull-right">
-          <li class="active"><a ng-href="#">Home</a></li>
-          <li><a ng-href="#/about">About</a></li>
-          <li><a ng-href="#">Contact</a></li>
-        </ul>
-        <h3 class="text-muted">listIt</h3>
+      <header>
+        <h1>Live Search
+          <small>Extract lists and attach live search functionality</small>
+        </h1>
+        <p id="warning">Note: At this stage the app still lacks the logic to recognize and extract lists, so the HTML source is bound to a <a target="_blank" href="sample.html">modulated sample</a>.</p>
+      </header>
+      <div ng-controller="MainCtrl">
+        <div class="form-group">
+          <div class="input-group">
+            <input type="text" ng-model="srcURL" placeholder="Source URL" class="form-control">
+          <span class="input-group-btn">
+            <input ng-click="getSrcMarkup()" class="btn btn-primary" value="Extract List">
+          </span>
+          </div>
+
+        </div>
+        <input type="text" class="form-control" ng-model="filterRegex" placeholder="Search">
+        <div my-compiler=""></div>
       </div>
-
-      <div ng-view=""></div>
-
       <div class="footer">
-        <p><span class="glyphicon glyphicon-heart"></span> from the Yeoman team</p>
+        <p>@Author <a href="http://austin-sa-wang.github.io/">Austin S.A. Wang</a> @<a href="https://github.com/austin-sa-wang/live-search">GitHub</a> </p>
       </div>
     </div>
-
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
      <script>
@@ -70,11 +77,9 @@
     <!-- endbower -->
     <!-- endbuild -->
 
-        <!-- build:js({.tmp,app}) scripts/scripts.js -->
-        <script src="scripts/app.js"></script>
-        <script src="scripts/controllers/main.js"></script>
-        <script src="scripts/controllers/about.js"></script>
-        <script src="scripts/directives.js"></script>
-        <!-- endbuild -->
+    <!-- build:js({.tmp,app}) scripts/scripts.js -->
+    <script src="scripts/app.js"></script>
+    <script src="scripts/liveSearchCore.js"></script>
+    <!-- endbuild -->
 </body>
 </html>

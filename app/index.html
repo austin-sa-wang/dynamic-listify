@@ -22,6 +22,9 @@
 
     <!-- Add your site or application content here -->
     <div class="container">
+      <div ng-controller="srcMarkUpCtrl">
+        <div live-search-list="" src-markup="list1"></div>
+      </div>
       <header>
         <h1>Live Search
           <small>Extract lists and attach live search functionality</small>
@@ -41,6 +44,7 @@
         <input type="text" class="form-control" ng-model="filterRegex" placeholder="Search">
         <div my-compiler=""></div>
       </div>
+
       <div class="footer">
         <p>@Author <a href="http://austin-sa-wang.github.io/">Austin S.A. Wang</a> @<a href="https://github.com/austin-sa-wang/live-search">GitHub</a> </p>
       </div>
@@ -80,6 +84,7 @@
     <!-- build:js({.tmp,app}) scripts/scripts.js -->
     <script src="scripts/app.js"></script>
     <script src="scripts/liveSearchCore.js"></script>
+    <script src="scripts/live_search_list.js"></script>
     <!-- endbuild -->
 </body>
 </html>

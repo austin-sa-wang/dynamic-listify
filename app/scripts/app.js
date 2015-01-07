@@ -13,10 +13,10 @@ angular
     'LiveSearchCore',
     'liveSearchList'
   ])
-  .controller('srcMarkUpCtrl', function ($scope, listFilterFactory) {
+  .controller('srcMarkUpCtrl', function ($scope) {
     $scope.list1 = {
       head: 'HEAD',
-      data: 'HELLO'
+      data: 'DATA'
     };
 
     $.get('sample.html', function (response) {
@@ -27,11 +27,7 @@ angular
       listData.appendChild(trueSrc.getElementsByTagName('tbody')[0]);
       listHead.appendChild(trueSrc.children[0]);
       $scope.list1.head = listHead.childNodes[0];
-      $scope.list1.listContent = listData.childNodes[0];
-      $scope.list1.data = response;
-      console.log($scope.list1.head);
-      console.log($scope.list1.data);
-      listFilterFactory.filterList($scope.list1.listContent, 'a');
+      $scope.list1.data = listData.childNodes[0];
     });
   });
 

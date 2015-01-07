@@ -1,66 +1,43 @@
 angular
-  .module('liveSearchList', [])
+  .module('liveSearchList', [
+    'listFilterFactory'
+  ])
 
-  .controller('liveSearchListCtrl', function() {
+  .controller('LiveSearchListCtrl', function() {
     this.filterExpr = '';
   })
 
-  .directive('liveSearchList', function() {
+  .directive('liveSearchList', ['ListFilterFactory', function(ListFilterFactory) {
     return {
       scope: {
         // Expect srcMarkup to be ready before being added during runtime
         srcMarkup: '='
       },
-      templateUrl: 'live-search-list.html',
-      controller: 'liveSearchListCtrl',
+      templateUrl: 'scripts/live-search-list.html',
+      controller: 'LiveSearchListCtrl',
       controllerAs: 'ctrl',
       link: function (scope, element) {
-        var src = document.createElement('div');
+        var header = scope.srcMarkup.head;
+        var listContent = scope.srcMarkup.data;
+        var filteredList;
+
         var domList = element.children('div')[0];
-        var fragList;
-        var filteredFragList = document.createDocumentFragment();
-        var regex;
 
-        // PROTOTYPE
-        var trueSrc = document.createElement('div');
-        trueSrc.innerHTML = scope.srcMarkup.data;
-
-        resetList();
-        fragList = src.getElementsByTagName('tbody')[0].children;
+        domList.appendChild(header);
+        header.appendChild(listContent);
 
         scope.$watch('ctrl.filterExpr', function () {
           updateList();
         });
 
         function updateList() {
-          if (!src.childElementCount) {
-            return;
-          }
-          resetList();
-          filterList();
-          domList.innerHTML = '';
-          domList.appendChild(filteredFragList);
-        }
-
-        function resetList() {
-          //src.innerHTML = scope.srcMarkup.data;
-          src = trueSrc.cloneNode(true);
-          fragList = src.getElementsByTagName('tbody')[0].children;
-        }
-
-        function filterList () {
-          regex = new RegExp(scope.ctrl.filterExpr, 'i');
-          var tmp;
-          for (var i = 0; i < fragList.length; i++) {
-            tmp = fragList[i];
-            if (regex.exec(tmp.innerText)) {
-              filteredFragList.appendChild(tmp);
-            }
-          }
+          console.log(scope.ctrl.filterExpr);
+          filteredList = ListFilterFactory.filterList(listContent, scope.ctrl.filterExpr);
+          domList.replaceChild(filteredList, domList.lastChild);
         }
       }
     }
-  })
+  }])
 ;
 
 

@@ -11,7 +11,7 @@ angular
         // Expect srcMarkup to be ready before being added during runtime
         srcMarkup: '='
       },
-      templateUrl: 'scripts/live_search_list.html',
+      templateUrl: 'live-search-list.html',
       controller: 'liveSearchListCtrl',
       controllerAs: 'ctrl',
       link: function (scope, element) {

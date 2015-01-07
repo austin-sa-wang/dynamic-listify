@@ -33,25 +33,6 @@ angular
       console.log($scope.list1.data);
       listFilterFactory.filterList($scope.list1.listContent, 'a');
     });
-  })
-  .factory('listFilterFactory', function listFilterFactory () {
-    listFilterFactory.filterList = function (_list, filterExpr) {
-      var list = _list.cloneNode(true);
-      var listChildren = list.children;
-      var regex = new RegExp(filterExpr, 'i');
-      var currentNode;
-
-      for (var i = 0; i < listChildren.length; ) {
-        currentNode = listChildren[i];
-        if (!regex.exec(currentNode.innerText)) {
-          list.removeChild(currentNode);
-          i++;
-        }
-      }
-
-      return list;
-    }
-    return listFilterFactory;
   });
 
 

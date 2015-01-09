@@ -1,13 +1,12 @@
 angular
   .module('liveSearchList', [
-    'listFilterFactory'
   ])
 
   .controller('LiveSearchListCtrl', function() {
     this.filterExpr = '';
   })
 
-  .directive('liveSearchList', ['ListFilterFactory', function(ListFilterFactory) {
+  .directive('liveSearchList', function() {
     return {
       scope: {
         // Expect srcMarkup to be ready before being added during runtime
@@ -17,27 +16,37 @@ angular
       controller: 'LiveSearchListCtrl',
       controllerAs: 'ctrl',
       link: function (scope, element) {
+        var domList = element.children('div')[0];
         var header = scope.srcMarkup.head;
         var listContent = scope.srcMarkup.data;
-        var filteredList;
-
-        var domList = element.children('div')[0];
 
         domList.appendChild(header);
         header.appendChild(listContent);
 
         scope.$watch('ctrl.filterExpr', function () {
-          updateList();
+          updateListWithHTMLDisplay();
         });
 
-        function updateList() {
-          console.log(scope.ctrl.filterExpr);
-          filteredList = ListFilterFactory.filterList(listContent, scope.ctrl.filterExpr);
-          domList.replaceChild(filteredList, domList.lastChild);
+        function updateListWithHTMLDisplay () {
+          var regex = new RegExp(scope.ctrl.filterExpr, 'i');
+
+          var listChildren = listContent.children;
+          var currentNode;
+
+          // Remove filtered nodes
+          for (var i = 0; i < listChildren.length; i++) {
+            currentNode = listChildren[i];
+            if (!regex.exec(currentNode.innerText)) {
+              currentNode.style.display = 'none';
+            } else {
+              currentNode.style.display = '';
+            }
+          }
         }
+
       }
     }
-  }])
+  })
 ;
 
 

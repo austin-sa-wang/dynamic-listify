@@ -20,29 +20,17 @@
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 
-    <!-- Add your site or application content here -->
+    <!-- application content -->
     <div class="container">
-      <div ng-controller="srcMarkUpCtrl">
-        <div live-search-list="" src-markup="list1"></div>
-      </div>
       <header>
         <h1>Live Search
           <small>Extract lists and attach live search functionality</small>
         </h1>
         <p id="warning">Note: At this stage the app still lacks the logic to recognize and extract lists, so the HTML source is bound to a <a target="_blank" href="sample.html">modulated sample</a>.</p>
       </header>
-      <div ng-controller="MainCtrl">
-        <div class="form-group">
-          <div class="input-group">
-            <input type="text" ng-model="srcURL" placeholder="Source URL" class="form-control">
-          <span class="input-group-btn">
-            <input ng-click="getSrcMarkup()" class="btn btn-primary" value="Extract List">
-          </span>
-          </div>
-
-        </div>
-        <input type="text" class="form-control" ng-model="filterRegex" placeholder="Search">
-        <div my-compiler=""></div>
+      <div ng-controller="MainCtrl as ctrl">
+        <div ls-search-bar=""></div>
+        <div live-search-list-container=""></div>
       </div>
 
       <div class="footer">
@@ -85,7 +73,9 @@
     <script src="scripts/app.js"></script>
     <script src="scripts/liveSearchCore.js"></script>
     <script src="scripts/liveSearchList.js"></script>
-    <script src="scripts/listFilterFactory.js"></script>
+    <script src="scripts/liveSearchListContainer.js"></script>
+    <script src="scripts/lsSearchBar.js"></script>
+    <script src="scripts/listExractionFactory.js"></script>
     <!-- endbuild -->
 </body>
 </html>

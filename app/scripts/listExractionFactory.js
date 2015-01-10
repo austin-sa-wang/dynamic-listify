@@ -9,57 +9,61 @@ angular
 
     ListExtractionFactory.lists = [];
 
+    var pushListResource = function (tableElement) {
+      ListExtractionFactory.lists.push(tableElement);
+    };
+
     var broadcast = function (data) {
       $rootScope.$broadcast(ListExtractionFactory.EVENT_NAME, data)
     };
 
-    ListExtractionFactory.listen = function (callback) {
-      $rootScope.$on(ListExtractionFactory.EVENT_NAME, callback);
+    // This extraction method targets table elements only
+    ListExtractionFactory.extractLists = function (markup) {
+      var tableCount = 0;
+
+      var domHead = document.createElement('div');
+      domHead.innerHTML = markup;
+      var tableList = domHead.getElementsByTagName('table');
+
+      // Find table with qualifying child count, remove it from dom, and push it onto lists
+      var currentTable, childCount, detachedTable;
+      for (var i = 0; i < tableList.length;) {
+        currentTable = tableList[i];
+        childCount = currentTable.getElementsByTagName('tbody')[0].children.length;
+        if (childCount > ListExtractionFactory.MIN_CHILD_COUNT_TO_QUALITY) {
+          detachedTable = domHead.removeChild(currentTable);
+          pushListResource(detachedTable);
+
+          tableCount++;
+        } else {
+          // Dynamic HTML node list. Avoid increment when an item is removed
+          i++;
+        }
+      }
+
+      broadcast(tableCount);
     };
 
     ListExtractionFactory.extract = function (url) {
       var promise = $.get(url).
-        done(function (data) {
-          ListExtractionFactory.extractLists(data);
+        done(function (response) {
+          ListExtractionFactory.extractLists(response);
         });
       return promise;
     };
 
-    ListExtractionFactory.extractLists = function (markup) {
-      var domHead = document.createElement('div');
-      domHead.innerHTML = markup;
+    ListExtractionFactory.separateTableIntoContainerAndContent = function (tableElement) {
+      var content = tableElement.getElementsByTagName('tbody')[0];
+      var detachedContent = tableElement.removeChild(content);
 
-      var tableCount = 0;
-
-      // find table with more than
-      var tableList = domHead.getElementsByTagName('table');
-
-      var currentTable;
-      var childCount;
-      for (var i = 0; i < tableList.length;) {
-        currentTable = tableList[i];
-        childCount = currentTable.getElementsByTagName('tbody')[0].children.length;
-        if (childCount >= ListExtractionFactory.MIN_CHILD_COUNT_TO_QUALITY) {
-          ListExtractionFactory.pushListResource(currentTable);
-          tableCount++;
-        } else {
-          i++;
-        }
-      }
-      broadcast(tableCount);
-      return tableCount;
+      return {
+        container: tableElement,
+        content: detachedContent
+      };
     };
 
-    ListExtractionFactory.pushListResource = function (tableElement) {
-      var listHead = document.createDocumentFragment();
-      var listData = document.createDocumentFragment();
-      listData.appendChild(tableElement.getElementsByTagName('tbody')[0]);
-      listHead.appendChild(tableElement);
-      var headDataPair = {
-        head: tableElement,
-        data: listData.childNodes[0]
-      };
-      ListExtractionFactory.lists.push(headDataPair);
+    ListExtractionFactory.listen = function (callback) {
+      $rootScope.$on(ListExtractionFactory.EVENT_NAME, callback);
     };
 
     return ListExtractionFactory;

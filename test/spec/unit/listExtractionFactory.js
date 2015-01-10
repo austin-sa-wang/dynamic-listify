@@ -30,30 +30,8 @@ describe('listExractionFactory', function() {
     $rootScope.$broadcast(EXPECTED_EVENT_NAME);
   });
 
-  // Test broadcast in it's isolated jasmine.done block
-  describe("broadcast", function() {
-    beforeEach(function (done) {
-      spyOn($rootScope, "$broadcast");
-
-      ListExtractionFactory.extract(URL)
-        .then(function () {
-          done();
-        });
-    });
-
-    it('broadcast correct event when done', function () {
-      expect($rootScope.$broadcast).toHaveBeenCalledWith(EXPECTED_EVENT_NAME, jasmine.any(Number));
-    });
-
-    it('broadcast correct table count when done', function () {
-      expect($rootScope.$broadcast).toHaveBeenCalledWith(EXPECTED_EVENT_NAME, 2);
-    });
-
-  });
-
-  describe('make list data available', function () {
+  describe("dependency of AJAX response", function() {
     var markup;
-
     beforeEach(function (done) {
       $.get(URL).
         done(function (data) {
@@ -62,7 +40,19 @@ describe('listExractionFactory', function() {
         });
     });
 
-    it('correct table content', function() {
+    it('broadcast correct event', function () {
+      spyOn($rootScope, "$broadcast");
+      ListExtractionFactory.extractLists(markup);
+      expect($rootScope.$broadcast).toHaveBeenCalledWith(EXPECTED_EVENT_NAME, jasmine.any(Number));
+    });
+
+    it('broadcast correct list count', function () {
+      spyOn($rootScope, "$broadcast");
+      ListExtractionFactory.extractLists(markup);
+      expect($rootScope.$broadcast).toHaveBeenCalledWith(EXPECTED_EVENT_NAME, 2);
+    });
+
+    it('make list content available', function() {
       ListExtractionFactory.extractLists(markup);
       expect(ListExtractionFactory.lists[0].getElementsByTagName('tbody')[0].children.length).toEqual(4);
       expect(ListExtractionFactory.lists[1].getElementsByTagName('tbody')[0].children.length).toEqual(6);

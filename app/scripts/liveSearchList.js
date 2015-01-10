@@ -21,15 +21,10 @@ angular
         var separatedList = ListExtractionFactory.separateTableIntoContainerAndContent(list);
         var header = separatedList.container;
         var listContent = separatedList.content;
-        console.log('start append list container');
         domList.appendChild(header);
-        console.log('end append list container');
-        console.log('start append list content');
         header.appendChild(listContent);
-        console.log('end append list content');
 
         scope.$watch('ctrl.filterExpr', function () {
-          //updateListWithHTMLDisplay();
           updateListWithHTMLDisplay(listContent);
         });
 

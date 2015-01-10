@@ -53,8 +53,8 @@ angular
     };
 
     ListExtractionFactory.extract = function (url) {
-      var promise = $.get(proxyUrl(url)).
-        done(function (response) {
+      var promise = $http.get(proxyUrl(url)).
+      success(function (response) {
           console.log('list markup extracted');
           ListExtractionFactory.extractLists(response);
         });

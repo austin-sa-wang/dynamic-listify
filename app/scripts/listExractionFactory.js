@@ -9,13 +9,19 @@ angular
 
     ListExtractionFactory.lists = [];
 
-    var pushListResource = function (tableElement) {
+    function pushListResource (tableElement) {
       ListExtractionFactory.lists.push(tableElement);
-    };
+    }
 
-    var broadcast = function (data) {
+    function broadcast (data) {
       $rootScope.$broadcast(ListExtractionFactory.EVENT_NAME, data)
-    };
+    }
+
+    function proxyUrl(srcUrl) {
+      var proxySegment = 'http://www.corsproxy.com/';
+      var srcURLSegment = srcUrl.replace('http://', '');
+      return proxySegment + srcURLSegment;
+    }
 
     // This extraction method targets table elements only
     ListExtractionFactory.extractLists = function (markup) {
@@ -31,7 +37,7 @@ angular
         currentTable = tableList[i];
         childCount = currentTable.getElementsByTagName('tbody')[0].children.length;
         if (childCount > ListExtractionFactory.MIN_CHILD_COUNT_TO_QUALITY) {
-          detachedTable = domHead.removeChild(currentTable);
+          detachedTable = currentTable.parentNode.removeChild(currentTable);
           pushListResource(detachedTable);
 
           tableCount++;
@@ -45,7 +51,7 @@ angular
     };
 
     ListExtractionFactory.extract = function (url) {
-      var promise = $.get(url).
+      var promise = $.get(proxyUrl(url)).
         done(function (response) {
           ListExtractionFactory.extractLists(response);
         });

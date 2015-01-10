@@ -4,11 +4,8 @@ angular
   ])
 
   .controller('lsSearchBarCtrl', function ($scope, ListExtractionFactory) {
-    this.srcUrl = '';
+    this.srcUrl = 'http://bindingofisaacrebirth.gamepedia.com/Items';
     this.extractLists = function () {
-      ListExtractionFactory.listen( function (event, data) {
-        console.log(data);
-      });
       ListExtractionFactory.extract(this.srcUrl);
     };
   })

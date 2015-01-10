@@ -20,6 +20,7 @@ angular
     function proxyUrl(srcUrl) {
       var proxySegment = 'http://www.corsproxy.com/';
       var srcURLSegment = srcUrl.replace('http://', '');
+      console.log('extract from' + proxySegment + srcURLSegment);
       return proxySegment + srcURLSegment;
     }
 
@@ -47,12 +48,14 @@ angular
         }
       }
 
+      console.log('extraction done with ' + tableCount + ' lists');
       broadcast(tableCount);
     };
 
     ListExtractionFactory.extract = function (url) {
       var promise = $.get(proxyUrl(url)).
         done(function (response) {
+          console.log('list markup extracted');
           ListExtractionFactory.extractLists(response);
         });
       return promise;

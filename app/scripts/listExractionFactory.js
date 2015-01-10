@@ -5,7 +5,7 @@ angular
 
   .factory('ListExtractionFactory', function ListExtractionFactory ($http, $rootScope) {
     ListExtractionFactory.EVENT_NAME = 'lists:ready';
-    ListExtractionFactory.MIN_CHILD_COUNT_TO_QUALITY = 4;
+    ListExtractionFactory.MIN_CHILD_COUNT_TO_QUALITY = 10;
 
     ListExtractionFactory.lists = [];
 

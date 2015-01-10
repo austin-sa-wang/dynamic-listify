@@ -12,6 +12,9 @@ describe('listExractionFactory', function() {
     $rootScope = _$rootScope_;
     ListExtractionFactory = _ListExtractionFactory_;
     EXPECTED_EVENT_NAME = ListExtractionFactory.EVENT_NAME;
+
+    // Override min count to quality for the test sample
+    ListExtractionFactory.MIN_CHILD_COUNT_TO_QUALITY = 4;
   }));
 
   it('check the existence of ListExtractionFactory factory', function () {
@@ -60,7 +63,7 @@ describe('listExractionFactory', function() {
     });
 
     it('makes list data accessible', function() {
-      var numberOfLists = ListExtractionFactory.extractLists(markup);
+      ListExtractionFactory.extractLists(markup);
       expect(ListExtractionFactory.lists[0].head.id).toEqual('four-rows');
       expect(ListExtractionFactory.lists[0].data.children.length).toEqual(4);
       expect(ListExtractionFactory.lists[1].head.id).toEqual('six-rows');

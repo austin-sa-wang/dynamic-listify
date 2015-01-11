@@ -1,6 +1,5 @@
 angular
   .module('listExtractionFactory', [
-
   ])
 
   .factory('ListExtractionFactory', function ListExtractionFactory ($http, $rootScope) {

@@ -1,21 +1,21 @@
-angular.module('liveSearchListContainer', [
+angular
+  .module('liveSearchListContainer', [
+  ])
 
-])
   .directive('liveSearchListContainer', function ($compile, ListExtractionFactory) {
     return {
-      scope: {
-
-      },
+      scope: {},
       link: function (scope, element) {
-        var addNewLiveSearchList = function  (event, listCount) {
+        var addLiveSearchListToDom = function  (event, listCount) {
+          var newDomListMarkup, newDomList;
           for (var i = 0; i < listCount; i++) {
-            var newDomListMarkup = '<div live-search-list="" list-number=\"' + i + '\"></div>';
-            var newDomList = $compile(newDomListMarkup)(scope);
+            newDomListMarkup = '<div live-search-list="" list-number=\"' + i + '\"></div>';
+            newDomList = $compile(newDomListMarkup)(scope);
             element.append(newDomList);
           }
         };
 
-        ListExtractionFactory.listen(addNewLiveSearchList);
+        ListExtractionFactory.listen(addLiveSearchListToDom);
       }
     }
   });

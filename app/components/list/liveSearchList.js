@@ -16,13 +16,13 @@ angular
       controller: 'LiveSearchListCtrl',
       controllerAs: 'ctrl',
       link: function (scope, element) {
-        var domList = element.children('div')[0];
+        var domContainerNode = element.children('div')[0];
         var list = ListExtractionFactory.lists[scope.listNumber];
         var separatedList = ListExtractionFactory.separateTableIntoContainerAndContent(list);
         var header = separatedList.container;
         var listContent = separatedList.content;
 
-        domList.appendChild(header);
+        domContainerNode.appendChild(header);
         header.appendChild(listContent);
 
         /**

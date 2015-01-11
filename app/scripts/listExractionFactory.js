@@ -19,7 +19,15 @@ angular
 
     function proxyUrl(srcUrl) {
       var proxySegment = 'http://www.corsproxy.com/';
-      var srcURLSegment = srcUrl.replace('http://', '');
+      var srcURLSegment = srcUrl;
+
+      // Remove http/https prefix
+      if (srcUrl.search('https://') != -1) {
+        srcURLSegment = srcUrl.substr(8);
+      } else if (srcUrl.search('http://') != -1) {
+        srcURLSegment = srcUrl.substr(7);
+      }
+
       console.log('extract from' + proxySegment + srcURLSegment);
       return proxySegment + srcURLSegment;
     }

@@ -56,11 +56,11 @@ angular
 
             // Remove filtered nodes
             for (var i = 0; i < listChildren.length; i++) {
-              currentNode = listChildren[i];
-              if (!regex.exec(currentNode.innerText)) {
-                currentNode.style.display = 'none';
+              currentNode = $(listChildren[i]);
+              if (!regex.exec(currentNode.text())) {
+                currentNode.css('display', 'none');
               } else {
-                currentNode.style.display = '';
+                currentNode.css('display', '');
               }
             }
           });

@@ -13,8 +13,8 @@ angular
   .directive('lsSearchBar', function () {
     return {
       scope: {},
+      templateUrl: 'components/search_bar/ls-search-bar.html',
       controller: 'lsSearchBarCtrl',
-      controllerAs: 'ctrl',
-      templateUrl: 'scripts/ls-search-bar.html'
+      controllerAs: 'ctrl'
     }
   });

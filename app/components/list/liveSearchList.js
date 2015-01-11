@@ -12,7 +12,7 @@ angular
         // Expect srcMarkup to be ready before being added during runtime
         listNumber: '@'
       },
-      templateUrl: 'scripts/live-search-list.html',
+      templateUrl: 'components/list/live-search-list.html',
       controller: 'LiveSearchListCtrl',
       controllerAs: 'ctrl',
       link: function (scope, element) {

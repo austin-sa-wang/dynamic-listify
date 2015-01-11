@@ -21,12 +21,9 @@ angular
         var separatedList = ListExtractionFactory.separateTableIntoContainerAndContent(list);
         var header = separatedList.container;
         var listContent = separatedList.content;
+
         domList.appendChild(header);
         header.appendChild(listContent);
-
-        scope.$watch('ctrl.filterExpr', function () {
-          updateListWithHTMLDisplay(listContent);
-        });
 
         /**
          * Run callback with the element removed from the DOM (and thus being
@@ -39,7 +36,7 @@ angular
          * @return {T} Value returned by the callback function.
          * @template T
          */
-        function updateDomWithElementRemoved(element, callback) {
+        var updateDomWithElementRemoved = function (element, callback) {
           var parentNode = element.parentNode;
           var nextSibling = element.nextSibling;
           parentNode.removeChild(element);
@@ -50,9 +47,9 @@ angular
             parentNode.insertBefore(element, nextSibling);
           }
           return retval;
-        }
+        };
 
-        function updateListWithHTMLDisplay(element) {
+        var updateListWithHTMLDisplay = function (element) {
           updateDomWithElementRemoved(element, function() {
             var regex = new RegExp(scope.ctrl.filterExpr, 'i');
             var listChildren = element.children;
@@ -68,7 +65,11 @@ angular
               }
             }
           });
-        }
+        };
+
+        scope.$watch('ctrl.filterExpr', function () {
+          updateListWithHTMLDisplay(listContent);
+        });
       }
     }
   });

@@ -9,15 +9,15 @@ angular
 
     ListExtractionFactory.lists = [];
 
-    function pushListResource (tableElement) {
+    var pushListResource = function (tableElement) {
       ListExtractionFactory.lists.push(tableElement);
-    }
+    };
 
-    function broadcast (data) {
+    var broadcast = function (data) {
       $rootScope.$broadcast(ListExtractionFactory.EVENT_NAME, data)
-    }
+    };
 
-    function proxyUrl(srcUrl) {
+    var proxyUrl = function (srcUrl) {
       var proxySegment = 'http://www.corsproxy.com/';
       var srcURLSegment = srcUrl;
 
@@ -30,7 +30,7 @@ angular
 
       console.log('extract from' + proxySegment + srcURLSegment);
       return proxySegment + srcURLSegment;
-    }
+    };
 
     // This extraction method targets table elements only
     ListExtractionFactory.extractLists = function (markup) {

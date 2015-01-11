@@ -26,12 +26,11 @@
         <h1>Live Search
           <small>Extract lists and attach live search functionality</small>
         </h1>
-        <p id="warning">Note: At this stage the app still lacks the logic to recognize and extract lists, so the HTML source is bound to a <a target="_blank" href="sample.html">modulated sample</a>.</p>
+        <p id="warning">Note: </p>
       </header>
-      <div ng-controller="MainCtrl as ctrl">
-        <div ls-search-bar=""></div>
-        <div live-search-list-container=""></div>
-      </div>
+
+      <div ls-search-bar=""></div>
+      <div live-search-list-container=""></div>
 
       <div class="footer">
         <p>@Author <a href="http://austin-sa-wang.github.io/">Austin S.A. Wang</a> @<a href="https://github.com/austin-sa-wang/live-search">GitHub</a> </p>
@@ -71,7 +70,6 @@
 
     <!-- build:js({.tmp,app}) scripts/scripts.js -->
     <script src="scripts/app.js"></script>
-    <script src="scripts/liveSearchCore.js"></script>
     <script src="scripts/liveSearchList.js"></script>
     <script src="scripts/liveSearchListContainer.js"></script>
     <script src="scripts/lsSearchBar.js"></script>

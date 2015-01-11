@@ -1,12 +1,11 @@
 angular
-  .module('liveSearchList', [
-  ])
+  .module('liveSearchList', [])
 
-  .controller('LiveSearchListCtrl', function() {
+  .controller('LiveSearchListCtrl', function () {
     this.filterExpr = '';
   })
 
-  .directive('liveSearchList', function(ListExtractionFactory) {
+  .directive('liveSearchList', function (ListExtractionFactory) {
     return {
       scope: {
         // Expect srcMarkup to be ready before being added during runtime
@@ -50,7 +49,7 @@ angular
         };
 
         var updateListWithHTMLDisplay = function (element) {
-          updateDomWithElementRemoved(element, function() {
+          updateDomWithElementRemoved(element, function () {
             var regex = new RegExp(scope.ctrl.filterExpr, 'i');
             var listChildren = element.children;
             var currentNode;

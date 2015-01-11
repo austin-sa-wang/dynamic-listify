@@ -1,8 +1,7 @@
 angular
-  .module('listExtractionFactory', [
-  ])
+  .module('listExtractionFactory', [])
 
-  .factory('ListExtractionFactory', function ListExtractionFactory ($http, $rootScope) {
+  .factory('ListExtractionFactory', function ListExtractionFactory($http, $rootScope) {
     ListExtractionFactory.EVENT_NAME = 'lists:ready';
     ListExtractionFactory.MIN_CHILD_COUNT_TO_QUALITY = 10;
 
@@ -61,7 +60,7 @@ angular
 
     ListExtractionFactory.extract = function (url) {
       var promise = $http.get(proxyUrl(url)).
-      success(function (response) {
+        success(function (response) {
           console.log('list markup extracted');
           ListExtractionFactory.extractLists(response);
         });

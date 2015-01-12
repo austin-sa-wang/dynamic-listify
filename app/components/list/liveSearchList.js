@@ -21,6 +21,9 @@ angular
         var header = separatedList.container;
         var listContent = separatedList.content;
 
+        header.classList.add('table');
+        header.classList.add('table-condensed');
+
         domContainerNode.appendChild(header);
         header.appendChild(listContent);
 

@@ -1,6 +1,6 @@
 'use strict';
 
-describe('listExractionFactory', function() {
+describe('listExtractionFactory', function() {
   var URL = 'base/test/fixtures/fullSample.html';
   var EXPECTED_EVENT_NAME;
   var ListExtractionFactory,

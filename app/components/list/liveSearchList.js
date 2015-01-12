@@ -24,6 +24,13 @@ angular
         header.classList.add('table');
         header.classList.add('table-condensed');
 
+        // If present, move <th> in <tbody> to <thead>
+        var firstRow = listContent.children[0];
+        if (firstRow.children[0].tagName === 'TH') {
+          var thead = header.appendChild(document.createElement('thead'));
+          thead.appendChild(firstRow);
+        }
+
         domContainerNode.appendChild(header);
         header.appendChild(listContent);
 

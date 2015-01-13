@@ -42,6 +42,8 @@ angular
       domHead.innerHTML = markup;
       var tableList = domHead.getElementsByTagName('table');
 
+      ListExtractionFactory.lists = [];
+
       // Find table with qualifying child count, remove it from dom, and push it onto lists
       var currentTable, childCount, detachedTable;
       for (var i = 0; i < tableList.length;) {

@@ -30,6 +30,13 @@ describe('listExtractionFactory', function() {
     $rootScope.$broadcast(EXPECTED_EVENT_NAME);
   });
 
+  it('broadcast correct event', function () {
+    var arbitraryNumber = 0;
+    spyOn($rootScope, "$broadcast");
+    ListExtractionFactory.broadcast(arbitraryNumber);
+    expect($rootScope.$broadcast).toHaveBeenCalledWith(EXPECTED_EVENT_NAME, jasmine.any(Number));
+  });
+
   describe("dependency of AJAX response", function() {
     var markup;
     beforeEach(function (done) {
@@ -40,20 +47,13 @@ describe('listExtractionFactory', function() {
         });
     });
 
-    it('broadcast correct event', function () {
-      spyOn($rootScope, "$broadcast");
-      ListExtractionFactory.extractLists(markup);
-      expect($rootScope.$broadcast).toHaveBeenCalledWith(EXPECTED_EVENT_NAME, jasmine.any(Number));
-    });
-
-    it('broadcast correct list count', function () {
-      spyOn($rootScope, "$broadcast");
-      ListExtractionFactory.extractLists(markup);
-      expect($rootScope.$broadcast).toHaveBeenCalledWith(EXPECTED_EVENT_NAME, 2);
+    it('determine correct table count', function () {
+      var tableCount = ListExtractionFactory.getTables(markup);
+      expect(tableCount).toEqual(2);
     });
 
     it('make list content available', function() {
-      ListExtractionFactory.extractLists(markup);
+      ListExtractionFactory.getTables(markup);
       expect(ListExtractionFactory.lists[0].getElementsByTagName('tbody')[0].children.length).toEqual(4);
       expect(ListExtractionFactory.lists[1].getElementsByTagName('tbody')[0].children.length).toEqual(6);
     });

@@ -33,7 +33,7 @@ angular
       _alert.count = 0;
     };
 
-    this.extractLists = function () {
+    this.getTables = function () {
       ListExtractionFactory.extract(this.srcUrl)
         .success(resetAlert)
         .error(showAlert);

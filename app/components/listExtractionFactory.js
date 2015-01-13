@@ -11,10 +11,6 @@ angular
       ListExtractionFactory.lists.push(tableElement);
     };
 
-    var broadcast = function (data) {
-      $rootScope.$broadcast(ListExtractionFactory.EVENT_NAME, data)
-    };
-
     var proxyUrl = function (srcUrl) {
       var proxySegment = 'http://www.corsproxy.com/';
       var srcURLSegment = srcUrl;
@@ -30,8 +26,16 @@ angular
       return proxySegment + srcURLSegment;
     };
 
+    ListExtractionFactory.broadcast = function (data) {
+      $rootScope.$broadcast(ListExtractionFactory.EVENT_NAME, data)
+    };
+
+    ListExtractionFactory.listen = function (callback) {
+      $rootScope.$on(ListExtractionFactory.EVENT_NAME, callback);
+    };
+
     // This extraction method targets table elements only
-    ListExtractionFactory.extractLists = function (markup) {
+    ListExtractionFactory.getTables = function (markup) {
       var tableCount = 0;
 
       var domHead = document.createElement('div');
@@ -54,14 +58,15 @@ angular
         }
       }
 
-      console.log('extraction done with ' + tableCount + ' lists');
-      broadcast(tableCount);
+      console.log('Found ' + tableCount + ' tables');
+      return tableCount;
     };
 
     ListExtractionFactory.extract = function (url) {
       var promise = $http.get(proxyUrl(url)).
         success(function (response) {
-          ListExtractionFactory.extractLists(response);
+          var tableCount = ListExtractionFactory.getTables(response);
+          ListExtractionFactory.broadcast(tableCount);
         });
       return promise;
     };
@@ -74,10 +79,6 @@ angular
         container: tableElement,
         content: detachedContent
       };
-    };
-
-    ListExtractionFactory.listen = function (callback) {
-      $rootScope.$on(ListExtractionFactory.EVENT_NAME, callback);
     };
 
     return ListExtractionFactory;

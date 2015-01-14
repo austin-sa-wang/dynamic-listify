@@ -12,7 +12,8 @@ angular
   .module('LiveSearchApp', [
     'liveSearchList',
     'liveSearchListContainer',
-    'lsSearchBar'
+    'lsSearchBar',
+    'ifChrome'
   ]);
 
 

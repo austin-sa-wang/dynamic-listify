@@ -24,9 +24,9 @@
 <div class="container">
   <header>
     <h1>Live Search
-      <small>Extract lists and attach live search functionality</small>
+      <small>Extract tables and attach search functionality</small>
     </h1>
-    <p id="warning">Note: </p>
+    <p if-chrome class="hidden bg-info">Chrome user may experience longer wait time and temporary UI freeze</p>
   </header>
 
   <div ls-search-bar=""></div>
@@ -82,6 +82,7 @@
 <script src="components/list/liveSearchListContainer.js"></script>
 <script src="components/search_bar/lsSearchBar.js"></script>
 <script src="components/listExtractionFactory.js"></script>
+<script src="components/ifChromeDirective.js"></script>
 <!-- endbuild -->
 </body>
 </html>

@@ -1,3 +1,13 @@
+#link-preset {
+  padding: 0 5px;
+}
+
+.link-preset-button {
+  border-top: none;
+  position: relative;
+  margin-top: -5px;
+  padding-top: 3px;
+}
 
 /*******************************************
  * Yeoman Generated

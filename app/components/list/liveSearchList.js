@@ -3,6 +3,17 @@ angular
 
   .controller('LiveSearchListCtrl', function () {
     this.filterExpr = '';
+    this.display = true;
+    this.icon = 'octicon octicon-chevron-down';
+    this.toggleList = function () {
+      if (this.display) {
+        this.display = false;
+        this.icon = 'octicon octicon-chevron-right';
+      } else {
+        this.display = true;
+        this.icon = 'octicon octicon-chevron-down';
+      }
+    }
   })
 
   .directive('liveSearchList', function (ListExtractionFactory) {

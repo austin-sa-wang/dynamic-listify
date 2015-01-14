@@ -9,6 +9,15 @@
   padding-top: 3px;
 }
 
+#listToggle {
+  position: absolute;
+  height: 20px;
+  width: 20px;
+  margin-left: -27px;
+  margin-top: 6px;
+  vertical-align: text-bottom;
+}
+
 /*******************************************
  * Yeoman Generated
  ******************************************/

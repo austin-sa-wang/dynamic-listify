@@ -1,5 +1,8 @@
 live-search
 ===========
-Web app to extract lists and attach live search functionality
+Web app to extract tables and attach search functionality
 
-Supported list format: HTML Table
+Design Flaw
+------
+This application is more suitable to be implemented as a browser plugin, instead of a web app.
+The code will be much cleaner and the result will be much more intuitive and usable.

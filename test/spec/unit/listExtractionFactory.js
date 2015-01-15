@@ -71,4 +71,13 @@ describe('listExtractionFactory', function() {
     expect(result.content.innerText).toEqual('text');
   });
 
+  it('Prefixes all relative links with host name', function () {
+    var markup = '<thead></thead><tbody><tr><td><a href="/child">text</a><img src="/img"></td></tr>' +
+      '<tr><td><a href="/child">text</a><img src="/img"></td></tr></tbody>';
+    var url = 'http://text.com/page';
+
+    var newMarkup = ListExtractionFactory.fixRelativeLinks(url, markup);
+    expect(newMarkup).toEqual('<thead></thead><tbody><tr><td><a href="http://text.com/child">text</a><img src="http://text.com/img"></td></tr>' +
+      '<tr><td><a href="http://text.com/child">text</a><img src="http://text.com/img"></td></tr></tbody>');
+  })
 });

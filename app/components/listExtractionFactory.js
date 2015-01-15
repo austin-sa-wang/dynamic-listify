@@ -34,7 +34,28 @@ angular
       $rootScope.$on(ListExtractionFactory.EVENT_NAME, callback);
     };
 
-    // This extraction method targets table elements only
+    ListExtractionFactory.fixRelativeLinks = function (url, markup) {
+      var link = document.createElement('a');
+      link.href = url;
+      var hostname = link.hostname;
+
+      var httpPrefix = '';
+      if (url.search('https://') != -1) {
+        httpPrefix = 'https://';
+      } else if (url.search('http://') != -1) {
+        httpPrefix = 'http://';
+      }
+
+      var aRegex = /href="\//g;
+      var a = 'href=\"' + httpPrefix + hostname + '/';
+      var imgRegex = /src="\//g;
+      var img = 'src=\"' + httpPrefix + hostname + '/';
+      var newMarkup = markup.replace(aRegex, a);
+      newMarkup = newMarkup.replace(imgRegex, img);
+
+      return newMarkup;
+    };
+
     ListExtractionFactory.getTables = function (markup) {
       var tableCount = 0;
 
@@ -67,7 +88,8 @@ angular
     ListExtractionFactory.extract = function (url) {
       var promise = $http.get(proxyUrl(url)).
         success(function (response) {
-          var tableCount = ListExtractionFactory.getTables(response);
+          var markup = ListExtractionFactory.fixRelativeLinks(url, response);
+          var tableCount = ListExtractionFactory.getTables(markup);
           ListExtractionFactory.broadcast(tableCount);
         });
       return promise;

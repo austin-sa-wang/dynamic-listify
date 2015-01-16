@@ -77,5 +77,5 @@ angular
       templateUrl: 'components/search_bar/ls-search-bar.html',
       controller: 'lsSearchBarCtrl',
       controllerAs: 'ctrl'
-    }
+    };
   });

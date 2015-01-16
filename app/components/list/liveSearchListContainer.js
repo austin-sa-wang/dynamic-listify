@@ -19,5 +19,5 @@ angular
 
         ListExtractionFactory.listen(addLiveSearchListToDom);
       }
-    }
+    };
   }]);

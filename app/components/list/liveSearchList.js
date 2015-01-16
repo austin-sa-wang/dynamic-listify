@@ -1,4 +1,5 @@
 'use strict';
+/*global $:false */
 
 angular
   .module('liveSearchList', [])
@@ -15,7 +16,7 @@ angular
         this.display = true;
         this.icon = 'octicon octicon-chevron-down';
       }
-    }
+    };
   })
 
   .directive('liveSearchList', ['ListExtractionFactory', function (ListExtractionFactory) {
@@ -62,8 +63,9 @@ angular
           var parentNode = element.parentNode;
           var nextSibling = element.nextSibling;
           parentNode.removeChild(element);
+          var retval;
           try {
-            var retval = callback();
+            retval = callback();
           }
           finally {
             parentNode.insertBefore(element, nextSibling);
@@ -93,5 +95,5 @@ angular
           updateListWithHTMLDisplay(listContent);
         });
       }
-    }
+    };
   }]);

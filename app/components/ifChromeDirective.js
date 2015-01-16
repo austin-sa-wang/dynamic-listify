@@ -11,5 +11,5 @@ angular
           tElem.removeClass('hidden');
         }
       }
-    }
+    };
   });

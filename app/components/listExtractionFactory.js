@@ -18,9 +18,9 @@ angular
       var srcURLSegment = srcUrl;
 
       // Remove http/https prefix
-      if (srcUrl.search('https://') != -1) {
+      if (srcUrl.search('https://') !== -1) {
         srcURLSegment = srcUrl.substr(8);
-      } else if (srcUrl.search('http://') != -1) {
+      } else if (srcUrl.search('http://') !== -1) {
         srcURLSegment = srcUrl.substr(7);
       }
 
@@ -29,7 +29,7 @@ angular
     };
 
     ListExtractionFactory.broadcast = function (data) {
-      $rootScope.$broadcast(ListExtractionFactory.EVENT_NAME, data)
+      $rootScope.$broadcast(ListExtractionFactory.EVENT_NAME, data);
     };
 
     ListExtractionFactory.listen = function (callback) {
@@ -42,9 +42,9 @@ angular
       var hostname = link.hostname;
 
       var httpPrefix = '';
-      if (url.search('https://') != -1) {
+      if (url.search('https://') !== -1) {
         httpPrefix = 'https://';
-      } else if (url.search('http://') != -1) {
+      } else if (url.search('http://') !== -1) {
         httpPrefix = 'http://';
       }
 

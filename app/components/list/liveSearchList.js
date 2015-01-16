@@ -1,3 +1,5 @@
+'use strict';
+
 angular
   .module('liveSearchList', [])
 
@@ -16,7 +18,7 @@ angular
     }
   })
 
-  .directive('liveSearchList', function (ListExtractionFactory) {
+  .directive('liveSearchList', ['ListExtractionFactory', function (ListExtractionFactory) {
     return {
       scope: {
         // Expect srcMarkup to be ready before being added during runtime
@@ -92,4 +94,4 @@ angular
         });
       }
     }
-  });
+  }]);

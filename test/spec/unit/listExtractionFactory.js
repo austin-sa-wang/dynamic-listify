@@ -1,4 +1,5 @@
 'use strict';
+/*global $:false */
 
 describe('listExtractionFactory', function() {
   var URL = 'base/test/fixtures/fullSample.html';
@@ -32,12 +33,12 @@ describe('listExtractionFactory', function() {
 
   it('broadcast correct event', function () {
     var arbitraryNumber = 0;
-    spyOn($rootScope, "$broadcast");
+    spyOn($rootScope, '$broadcast');
     ListExtractionFactory.broadcast(arbitraryNumber);
     expect($rootScope.$broadcast).toHaveBeenCalledWith(EXPECTED_EVENT_NAME, jasmine.any(Number));
   });
 
-  describe("dependency of AJAX response", function() {
+  describe('dependency of AJAX response', function() {
     var markup;
     beforeEach(function (done) {
       $.get(URL).
@@ -79,5 +80,5 @@ describe('listExtractionFactory', function() {
     var newMarkup = ListExtractionFactory.fixRelativeLinks(url, markup);
     expect(newMarkup).toEqual('<thead></thead><tbody><tr><td><a href="http://text.com/child">text</a><img src="http://text.com/img"></td></tr>' +
       '<tr><td><a href="http://text.com/child">text</a><img src="http://text.com/img"></td></tr></tbody>');
-  })
+  });
 });

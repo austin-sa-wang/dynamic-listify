@@ -1,10 +1,12 @@
+'use strict';
+
 angular
   .module('lsSearchBar', [
     'listExtractionFactory',
     'ui.bootstrap'
   ])
 
-  .controller('lsSearchBarCtrl', function ($scope, $timeout, ListExtractionFactory) {
+  .controller('lsSearchBarCtrl', ['$scope', '$timeout', 'ListExtractionFactory', function ($scope, $timeout, ListExtractionFactory) {
     var ALERT_MSG = 'Try again. Extraction failed.';
     var NO_TABLE_ALERT_MSG = 'No table found on target page. If there IS a table, then the table implementation is not supported. This app finds tables by the HTML <table> element.';
     var SEVERE_ALERT_MSG = 'Try a different web page. The app is unable to retrieve source data due to cross-origin resource sharing restrictions.';
@@ -67,7 +69,7 @@ angular
       this.getTables();
     };
 
-  })
+  }])
 
   .directive('lsSearchBar', function () {
     return {

@@ -1,7 +1,9 @@
+'use strict';
+
 angular
   .module('liveSearchListContainer', [])
 
-  .directive('liveSearchListContainer', function ($compile, ListExtractionFactory) {
+  .directive('liveSearchListContainer', ['$compile', 'ListExtractionFactory', function ($compile, ListExtractionFactory) {
     return {
       scope: {},
       link: function (scope, element) {
@@ -18,4 +20,4 @@ angular
         ListExtractionFactory.listen(addLiveSearchListToDom);
       }
     }
-  });
+  }]);

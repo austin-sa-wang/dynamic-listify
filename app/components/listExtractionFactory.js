@@ -1,7 +1,9 @@
+'use strict';
+
 angular
   .module('listExtractionFactory', [])
 
-  .factory('ListExtractionFactory', function ListExtractionFactory($http, $rootScope) {
+  .factory('ListExtractionFactory', ['$http', '$rootScope', function ListExtractionFactory($http, $rootScope) {
     ListExtractionFactory.EVENT_NAME = 'lists:ready';
     ListExtractionFactory.MIN_CHILD_COUNT_TO_QUALITY = 10;
 
@@ -106,4 +108,4 @@ angular
     };
 
     return ListExtractionFactory;
-  });
+  }]);

@@ -3,79 +3,82 @@
 angular
   .module('lsSearchBar', [
     'listExtractionFactory',
+    'urlUtilFactory',
     'ui.bootstrap'
   ])
 
-  .controller('lsSearchBarCtrl', ['$scope', '$timeout', 'ListExtractionFactory', function ($scope, $timeout, ListExtractionFactory) {
-    var ALERT_MSG = 'Try again. Extraction failed.';
+  .controller('lsSearchBarCtrl', ['$scope', '$timeout', 'ListExtractionFactory', 'UrlUtilFactory', function ($scope, $timeout, ListExtractionFactory, UrlUtilFactory) {
     var NO_TABLE_ALERT_MSG = 'No table found on target page. If there IS a table, then the table implementation is not supported. This app finds tables by the HTML <table> element.';
-    var SEVERE_ALERT_MSG = 'Try a different web page. The app is unable to retrieve source data due to cross-origin resource sharing restrictions.';
     var PROCESSING_MSG = 'Processing...';
+    var ERROR_MSG = 'Extraction failed. Try a different site.';
+    var UNRESPONSIVE_MSG = 'Target site is unresponsive. Try a different site.';
+    var EMPTY_URL_MSG = 'Empty URL';
 
     this.srcUrl = '';
     this.alert = {
       show: false,
       type: '',
-      count: 0,
-      msg: ALERT_MSG
-    };
-    var _alert = this.alert;
+      msg: '',
 
-    var showAlert = function() {
-      if (_alert.count > 1) {
-        _alert.msg = SEVERE_ALERT_MSG;
-        _alert.type = 'danger';
-      } else {
-        _alert.msg = ALERT_MSG;
-        _alert.type = '';
+      reset: function () {
+        this.show = false;
+      },
+
+      warning: function (msg) {
+        this.show = true;
+        this.type = '';
+        this.msg = msg;
+      },
+
+      error: function (msg) {
+        this.show = true;
+        this.type = 'danger';
+        this.msg = msg;
       }
-      _alert.show = true;
-      _alert.count++;
     };
 
-    var showNoTableFoundAlert = function () {
-      _alert.show = true;
-      _alert.type = '';
-      _alert.msg = NO_TABLE_ALERT_MSG;
-      _alert.count = 0;
-    };
-
-    var showProcessingAlert = function () {
-      _alert.show = true;
-      _alert.type = '';
-      _alert.msg = PROCESSING_MSG;
-    };
+    var _alert = this.alert;
 
     ListExtractionFactory.listen(function (event, data) {
       if (data === 0) {
         $timeout(function() {
-          showNoTableFoundAlert();
+          _alert.warning(NO_TABLE_ALERT_MSG);
         });
       }
     });
 
     this.getTables = function () {
-      //ListExtractionFactory.extract(this.srcUrl)
-      //  .success(function() {
-      //    _alert.show = false;
-      //    _alert.count = 0;
-      //  })
-      //  .error(showAlert);
+      if (this.srcUrl === '') {
+        _alert.error(EMPTY_URL_MSG);
+        return;
+      }
+      _alert.warning(PROCESSING_MSG);
+      var regex = /^http/;
+      if ( !regex.test(this.srcUrl) ) {
+        this.srcUrl = 'http://' + this.srcUrl;
+      }
+      UrlUtilFactory.testUrlStatus(this.srcUrl)
+        .valid(function() {
+          console.log('valid');
+        })
+        .invalid(function() {
+          $timeout(function() {
+            _alert.error(UNRESPONSIVE_MSG);
+          });
+        });
 
-      showProcessingAlert();
-      ListExtractionFactory.extractWhateverorigin(this.srcUrl)
+      ListExtractionFactory.extract(this.srcUrl)
         .done(function() {
-          _alert.show = false;
-          _alert.count = 0;
+          _alert.reset();
         })
         .fail(function() {
           $timeout(function() {
-            showAlert();
+            _alert.error(ERROR_MSG);
           });
         });
     };
 
-    this.setUrl = function(url) {
+    this.getPresetSite = function(url) {
       this.srcUrl = url;
       this.getTables();
     };

@@ -9,23 +9,12 @@ angular
 
     ListExtractionFactory.lists = [];
 
-    var pushListResource = function (tableElement) {
-      ListExtractionFactory.lists.push(tableElement);
+    var corsUrl = function (url) {
+      return 'http://whateverorigin.org/get?url=' + encodeURIComponent(url) + '&callback=?';
     };
 
-    var proxyUrl = function (srcUrl) {
-      var proxySegment = 'http://www.corsproxy.com/';
-      var srcURLSegment = srcUrl;
-
-      // Remove http/https prefix
-      if (srcUrl.search('https://') !== -1) {
-        srcURLSegment = srcUrl.substr(8);
-      } else if (srcUrl.search('http://') !== -1) {
-        srcURLSegment = srcUrl.substr(7);
-      }
-
-      console.log('extract from' + proxySegment + srcURLSegment);
-      return proxySegment + srcURLSegment;
+    var pushListResource = function (tableElement) {
+      ListExtractionFactory.lists.push(tableElement);
     };
 
     ListExtractionFactory.broadcast = function (data) {
@@ -37,6 +26,7 @@ angular
     };
 
     ListExtractionFactory.fixRelativeLinks = function (url, markup) {
+      console.log('fixRelativeLinks');
       var link = document.createElement('a');
       link.href = url;
       var hostname = link.hostname;
@@ -59,6 +49,7 @@ angular
     };
 
     ListExtractionFactory.getTables = function (markup) {
+      console.log('getTables');
       var tableCount = 0;
 
       var domHead = document.createElement('div');
@@ -75,7 +66,7 @@ angular
         if (childCount > ListExtractionFactory.MIN_CHILD_COUNT_TO_QUALITY) {
           detachedTable = currentTable.parentNode.removeChild(currentTable);
           pushListResource(detachedTable);
-
+          console.log('push ' + i);
           tableCount++;
         } else {
           // Dynamic HTML node list. Avoid increment when an item is removed
@@ -87,24 +78,11 @@ angular
       return tableCount;
     };
 
-    ListExtractionFactory.extractWhateverorigin = function (url) {
-      var regex = /^http/;
-      if ( !regex.test(url) ) {
-        url = 'http://' + url;
-      }
-      var promise = $.getJSON('http://whateverorigin.org/get?url=' + encodeURIComponent(url) + '&callback=?')
+    ListExtractionFactory.extract = function (url) {
+      console.log('extract');
+      var promise = $.getJSON(corsUrl(url))
         .done(function (response) {
           var markup = ListExtractionFactory.fixRelativeLinks(url, response.contents);
-          var tableCount = ListExtractionFactory.getTables(markup);
-          ListExtractionFactory.broadcast(tableCount);
-        });
-      return promise;
-    };
-
-    ListExtractionFactory.extract = function (url) {
-      var promise = $http.get(proxyUrl(url)).
-        success(function (response) {
-          var markup = ListExtractionFactory.fixRelativeLinks(url, response);
           var tableCount = ListExtractionFactory.getTables(markup);
           ListExtractionFactory.broadcast(tableCount);
         });

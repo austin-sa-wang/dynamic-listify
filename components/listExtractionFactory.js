@@ -88,6 +88,10 @@ angular
     };
 
     ListExtractionFactory.extractWhateverorigin = function (url) {
+      var regex = /^http/;
+      if ( !regex.test(url) ) {
+        url = 'http://' + url;
+      }
       var promise = $.getJSON('http://whateverorigin.org/get?url=' + encodeURIComponent(url) + '&callback=?')
         .done(function (response) {
           var markup = ListExtractionFactory.fixRelativeLinks(url, response.contents);

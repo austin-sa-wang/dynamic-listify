@@ -87,6 +87,16 @@ angular
       return tableCount;
     };
 
+    ListExtractionFactory.extractWhateverorigin = function (url) {
+      var promise = $.getJSON('http://whateverorigin.org/get?url=' + encodeURIComponent(url) + '&callback=?')
+        .done(function (response) {
+          var markup = ListExtractionFactory.fixRelativeLinks(url, response.contents);
+          var tableCount = ListExtractionFactory.getTables(markup);
+          ListExtractionFactory.broadcast(tableCount);
+        });
+      return promise;
+    };
+
     ListExtractionFactory.extract = function (url) {
       var promise = $http.get(proxyUrl(url)).
         success(function (response) {

@@ -55,13 +55,24 @@ angular
     });
 
     this.getTables = function () {
+      //ListExtractionFactory.extract(this.srcUrl)
+      //  .success(function() {
+      //    _alert.show = false;
+      //    _alert.count = 0;
+      //  })
+      //  .error(showAlert);
+
       showProcessingAlert();
-      ListExtractionFactory.extract(this.srcUrl)
-        .success(function() {
+      ListExtractionFactory.extractWhateverorigin(this.srcUrl)
+        .done(function() {
           _alert.show = false;
           _alert.count = 0;
         })
-        .error(showAlert);
+        .fail(function() {
+          $timeout(function() {
+            showAlert();
+          });
+        });
     };
 
     this.setUrl = function(url) {

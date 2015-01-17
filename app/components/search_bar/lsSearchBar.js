@@ -8,6 +8,7 @@ angular
   ])
 
   .controller('lsSearchBarCtrl', ['$scope', '$timeout', 'ListExtractionFactory', 'UrlUtilFactory', function ($scope, $timeout, ListExtractionFactory, UrlUtilFactory) {
+    //TODO: Refactor - Extract status UI out of lsSearchBarCtrl
     var NO_TABLE_ALERT_MSG = 'No table found on target page. If there IS a table, then the table implementation is not supported. This app finds tables by the HTML <table> element.';
     var PROCESSING_MSG = 'Processing...';
     var ERROR_MSG = 'Extraction failed. Try a different site.';
@@ -48,6 +49,7 @@ angular
     });
 
     this.getTables = function () {
+      //TODO: Refactor - Consolidate error checking
       if (this.srcUrl === '') {
         _alert.error(EMPTY_URL_MSG);
         return;
@@ -57,6 +59,13 @@ angular
       if ( !regex.test(this.srcUrl) ) {
         this.srcUrl = 'http://' + this.srcUrl;
       }
+
+      /*
+       * HACK: Compensate for the silent failure of $.getJSON in ListExtractionFactory.extract method when target URL is unavailable
+       * Run in parallel with extract to save 700ms. The 700ms is the turn-around time when target url is available.
+       * TODO: Better logic for testing the availability of target url
+       */
+      //
       UrlUtilFactory.testUrlStatus(this.srcUrl)
         .valid(function() {
           console.log('valid');

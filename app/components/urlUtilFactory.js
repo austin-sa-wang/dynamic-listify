@@ -4,6 +4,7 @@ angular
   .module('urlUtilFactory', [])
 
   .factory('UrlUtilFactory', function UrlUtilFactory () {
+    //TODO: Refactor - Extract onload/onerror (promise-like) logic into its own class, or use library
     var onload = {
       callback: undefined,
       triggered: false

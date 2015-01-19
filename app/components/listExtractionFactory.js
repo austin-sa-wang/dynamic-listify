@@ -10,7 +10,7 @@ angular
     ListExtractionFactory.lists = [];
 
     var corsUrl = function (url) {
-      return 'http://whateverorigin.org/get?url=' + encodeURIComponent(url) + '&callback=?';
+      return 'http://whateverorigin.org/get?url=' + encodeURIComponent(url) + '&callback=JSON_CALLBACK';
     };
 
     var pushListResource = function (tableElement) {
@@ -80,9 +80,9 @@ angular
 
     ListExtractionFactory.extract = function (url) {
       console.log('extract');
-      var promise = $.getJSON(corsUrl(url))
-        .done(function (response) {
-          var markup = ListExtractionFactory.fixRelativeLinks(url, response.contents);
+      var promise = $http.jsonp( corsUrl(url) )
+        .success(function (data) {
+          var markup = ListExtractionFactory.fixRelativeLinks(url, data.contents);
           var tableCount = ListExtractionFactory.getTables(markup);
           ListExtractionFactory.broadcast(tableCount);
         });

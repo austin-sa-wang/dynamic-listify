@@ -77,10 +77,12 @@ angular
         });
 
       ListExtractionFactory.extract(this.srcUrl)
-        .done(function() {
-          _alert.reset();
+        .success(function() {
+          $timeout(function() {
+            _alert.reset();
+          });
         })
-        .fail(function() {
+        .error(function() {
           $timeout(function() {
             _alert.error(ERROR_MSG);
           });

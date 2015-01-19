@@ -2,22 +2,25 @@
   "name": "list-it",
   "version": "0.0.0",
   "dependencies": {
-    "angular": "1.2.16",
+    "angular": "latest",
     "json3": "~3.3.1",
     "es5-shim": "~3.1.0",
     "bootstrap": "~3.1.1",
-    "angular-resource": "1.2.16",
-    "angular-cookies": "1.2.16",
-    "angular-sanitize": "1.2.16",
-    "angular-animate": "1.2.16",
-    "angular-touch": "1.2.16",
-    "angular-route": "1.2.16",
-    "angular-bootstrap": "~0.12.0",
+    "angular-resource": "latest",
+    "angular-cookies": "latest",
+    "angular-sanitize": "latest",
+    "angular-animate": "latest",
+    "angular-touch": "latest",
+    "angular-route": "latest",
+    "angular-bootstrap": "latest",
     "octicons": "*"
   },
   "devDependencies": {
-    "angular-mocks": "1.2.16",
-    "angular-scenario": "1.2.16"
+    "angular-mocks": "latest",
+    "angular-scenario": "latest"
   },
-  "appPath": "app"
+  "appPath": "app",
+  "resolutions": {
+    "angular": "1.3.9"
+  }
 }

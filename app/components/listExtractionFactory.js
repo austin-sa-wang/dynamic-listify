@@ -26,7 +26,6 @@ angular
     };
 
     ListExtractionFactory.fixRelativeLinks = function (url, markup) {
-      console.log('fixRelativeLinks');
       var link = document.createElement('a');
       link.href = url;
       var hostname = link.hostname;
@@ -49,7 +48,6 @@ angular
     };
 
     ListExtractionFactory.getTables = function (markup) {
-      console.log('getTables');
       var tableCount = 0;
 
       var domHead = document.createElement('div');
@@ -66,7 +64,6 @@ angular
         if (childCount > ListExtractionFactory.MIN_CHILD_COUNT_TO_QUALITY) {
           detachedTable = currentTable.parentNode.removeChild(currentTable);
           pushListResource(detachedTable);
-          console.log('push ' + i);
           tableCount++;
         } else {
           // Dynamic HTML node list. Avoid increment when an item is removed
@@ -74,12 +71,10 @@ angular
         }
       }
 
-      console.log('Found ' + tableCount + ' tables');
       return tableCount;
     };
 
     ListExtractionFactory.extract = function (url) {
-      console.log('extract');
       var promise = $http.jsonp( corsUrl(url) )
         .success(function (data) {
           var markup = ListExtractionFactory.fixRelativeLinks(url, data.contents);

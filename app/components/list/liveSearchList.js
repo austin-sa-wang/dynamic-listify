@@ -19,7 +19,7 @@ angular
     };
   })
 
-  .directive('liveSearchList', ['ListExtractionFactory', function (ListExtractionFactory) {
+  .directive('liveSearchList', ['ListExtractionFactory', '$interval', function (ListExtractionFactory, $interval) {
     return {
       scope: {
         // Expect srcMarkup to be ready before being added during runtime
@@ -46,7 +46,37 @@ angular
         }
 
         domContainerNode.appendChild(header);
-        header.appendChild(listContent);
+
+        var BLOCK_SIZE = 32;
+        var DOM_PUSH_INTERVAL = 150;
+
+        var newContainer = document.createElement('tbody');
+        header.appendChild(newContainer);
+        var childrenList = listContent.children;
+        var splits = [];
+        var currentSplit, count;
+        while(childrenList.length > 0) {
+          currentSplit = document.createDocumentFragment();
+
+          if (childrenList.length > BLOCK_SIZE) {
+            count = BLOCK_SIZE;
+          } else {
+            count = childrenList.length;
+          }
+
+          while (count > 0) {
+            currentSplit.appendChild(childrenList[0]);
+            count--;
+          }
+
+          splits.push(currentSplit);
+        }
+
+        $interval(function(){
+          newContainer.appendChild(splits.shift());
+        }, DOM_PUSH_INTERVAL, splits.length);
+
+        //header.appendChild(listContent);
 
         /**
          * Run callback with the element removed from the DOM (and thus being
@@ -92,7 +122,8 @@ angular
         };
 
         scope.$watch('ctrl.filterExpr', function () {
-          updateListWithHTMLDisplay(listContent);
+          //updateListWithHTMLDisplay(listContent);
+          updateListWithHTMLDisplay(newContainer);
         });
       }
     };

@@ -19,7 +19,7 @@ angular
     };
   })
 
-  .directive('liveSearchList', ['ListExtractionFactory', function (ListExtractionFactory) {
+  .directive('liveSearchList', ['ListExtractionFactory', '$interval', function (ListExtractionFactory, $interval) {
     return {
       scope: {
         // Expect srcMarkup to be ready before being added during runtime
@@ -29,24 +29,16 @@ angular
       controller: 'LiveSearchListCtrl',
       controllerAs: 'ctrl',
       link: function (scope, element) {
-        var domContainerNode = element.children('div')[0];
-        var list = ListExtractionFactory.lists[scope.listNumber];
-        var separatedList = ListExtractionFactory.separateTableIntoContainerAndContent(list);
-        var header = separatedList.container;
-        var listContent = separatedList.content;
 
-        header.classList.add('table');
-        header.classList.add('table-condensed');
+        var pushTableDataOntoTbody = function (tbodyNode, tableData) {
+          var BLOCK_SIZE = 32;
+          var DOM_PUSH_INTERVAL = 150;
 
-        // If present, move <th> in <tbody> to <thead>
-        var firstRow = listContent.children[0];
-        if (firstRow.children[0].tagName === 'TH') {
-          var thead = header.appendChild(document.createElement('thead'));
-          thead.appendChild(firstRow);
-        }
-
-        domContainerNode.appendChild(header);
-        header.appendChild(listContent);
+          var fragList = ListExtractionFactory.breakTableBodyIntoFragments(tableData, BLOCK_SIZE);
+          $interval(function(){
+            tbodyNode.appendChild(fragList.shift());
+          }, DOM_PUSH_INTERVAL, fragList.length);
+        };
 
         /**
          * Run callback with the element removed from the DOM (and thus being
@@ -91,8 +83,31 @@ angular
           });
         };
 
+        var domContainerNode = element.children('div')[0];
+        var list = ListExtractionFactory.lists[scope.listNumber];
+        var listContent = list.getElementsByTagName('tbody')[0];
+
+        // Add Bootstrap table style
+        list.classList.add('table');
+        list.classList.add('table-condensed');
+
+        // If present, move <th> in <tbody> to <thead>
+        var firstRow = listContent.children[0];
+        if (firstRow.children[0].tagName === 'TH') {
+          var thead = list.appendChild(document.createElement('thead'));
+          thead.appendChild(firstRow);
+        }
+
+        // Push table with empty table body onto DOM
+        var tbodyNode = document.createElement('tbody');
+        list.removeChild(listContent);
+        list.appendChild(tbodyNode);
+        domContainerNode.appendChild(list);
+
+        pushTableDataOntoTbody(tbodyNode, listContent);
+
         scope.$watch('ctrl.filterExpr', function () {
-          updateListWithHTMLDisplay(listContent);
+          updateListWithHTMLDisplay(tbodyNode);
         });
       }
     };

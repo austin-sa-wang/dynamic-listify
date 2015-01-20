@@ -4,6 +4,7 @@ angular
   .module('listExtractionFactory', [])
 
   .factory('ListExtractionFactory', ['$http', '$rootScope', function ListExtractionFactory($http, $rootScope) {
+    ListExtractionFactory.TIMEOUT_TIME = 2000;
     ListExtractionFactory.EVENT_NAME = 'lists:ready';
     ListExtractionFactory.MIN_CHILD_COUNT_TO_QUALITY = 10;
 
@@ -75,7 +76,7 @@ angular
     };
 
     ListExtractionFactory.extract = function (url) {
-      var promise = $http.jsonp( corsUrl(url) )
+      var promise = $http.jsonp(corsUrl(url), {timeout: ListExtractionFactory.TIMEOUT_TIME})
         .success(function (data) {
           var markup = ListExtractionFactory.fixRelativeLinks(url, data.contents);
           var tableCount = ListExtractionFactory.getTables(markup);

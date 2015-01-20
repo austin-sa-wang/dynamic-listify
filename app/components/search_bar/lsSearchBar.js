@@ -10,7 +10,7 @@ angular
     //TODO: Refactor - Extract status UI out of lsSearchBarCtrl
     var NO_TABLE_ALERT_MSG = 'No table found on target page. If there IS a table, then the table implementation is not supported. This app finds tables by the HTML <table> element.';
     var PROCESSING_MSG = 'Processing...';
-    var UNRESPONSIVE_MSG = 'Target site is unresponsive. Try a different site.';
+    var UNRESPONSIVE_MSG = 'Target site is unresponsive. Try again or try a different site.';
     var EMPTY_URL_MSG = 'Empty URL';
 
     this.srcUrl = '';

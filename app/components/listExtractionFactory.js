@@ -85,14 +85,27 @@ angular
       return promise;
     };
 
-    ListExtractionFactory.separateTableIntoContainerAndContent = function (tableElement) {
-      var content = tableElement.getElementsByTagName('tbody')[0];
-      var detachedContent = tableElement.removeChild(content);
+    ListExtractionFactory.breakTableBodyIntoFragments = function (tableBody, fragmentSize) {
+      var childrenList = tableBody.children;
+      var splits = [];
+      var currentSplit, count;
+      while(childrenList.length > 0) {
+        currentSplit = document.createDocumentFragment();
 
-      return {
-        container: tableElement,
-        content: detachedContent
-      };
+        if (childrenList.length > fragmentSize) {
+          count = fragmentSize;
+        } else {
+          count = childrenList.length;
+        }
+
+        while (count > 0) {
+          currentSplit.appendChild(childrenList[0]);
+          count--;
+        }
+
+        splits.push(currentSplit);
+      }
+      return splits;
     };
 
     return ListExtractionFactory;

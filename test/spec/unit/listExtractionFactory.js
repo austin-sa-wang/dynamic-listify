@@ -60,16 +60,20 @@ describe('listExtractionFactory', function() {
     });
   });
 
-  it('separate table container and content', function () {
-    var table = document.createElement('table');
-    var markup = '<thead></thead><tbody><tr><td>text</td></tr></tbody>';
-    table.innerHTML = markup;
-    var result = ListExtractionFactory.separateTableIntoContainerAndContent(table);
-    expect(result.container.nodeName).toEqual('TABLE');
-    expect(result.container.firstChild.nodeName).toEqual('THEAD');
-    expect(result.container.children.length).toEqual(1);
-    expect(result.content.nodeName).toEqual('TBODY');
-    expect(result.content.innerText).toEqual('text');
+  it('break table body into chunks', function () {
+    var markup = '<tr><td>data00</td></tr>' +
+      '<tr><td>data01</td></tr>' +
+      '<tr><td>data10</td></tr>';
+
+    var tbody = document.createElement('tbody');
+    tbody.innerHTML = markup;
+
+    var fragList = ListExtractionFactory.breakTableBodyIntoFragments(tbody, 2);
+    //console.log(fragList[0]);
+    expect(fragList.length).toEqual(2);
+    expect(fragList[0].childNodes[0].innerText).toEqual('data00');
+    expect(fragList[0].childNodes[1].innerText).toEqual('data01');
+    expect(fragList[1].childNodes[0].innerText).toEqual('data10');
   });
 
   it('Prefixes all relative links with host name', function () {

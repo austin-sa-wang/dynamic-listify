@@ -4,13 +4,14 @@ angular
   .module('listExtractionFactory', [])
 
   .factory('ListExtractionFactory', ['$http', '$rootScope', function ListExtractionFactory($http, $rootScope) {
+    ListExtractionFactory.TIMEOUT_TIME = 2000;
     ListExtractionFactory.EVENT_NAME = 'lists:ready';
     ListExtractionFactory.MIN_CHILD_COUNT_TO_QUALITY = 10;
 
     ListExtractionFactory.lists = [];
 
     var corsUrl = function (url) {
-      return 'http://whateverorigin.org/get?url=' + encodeURIComponent(url) + '&callback=?';
+      return 'http://whateverorigin.org/get?url=' + encodeURIComponent(url) + '&callback=JSON_CALLBACK';
     };
 
     var pushListResource = function (tableElement) {
@@ -26,7 +27,6 @@ angular
     };
 
     ListExtractionFactory.fixRelativeLinks = function (url, markup) {
-      console.log('fixRelativeLinks');
       var link = document.createElement('a');
       link.href = url;
       var hostname = link.hostname;
@@ -49,7 +49,6 @@ angular
     };
 
     ListExtractionFactory.getTables = function (markup) {
-      console.log('getTables');
       var tableCount = 0;
 
       var domHead = document.createElement('div');
@@ -66,7 +65,6 @@ angular
         if (childCount > ListExtractionFactory.MIN_CHILD_COUNT_TO_QUALITY) {
           detachedTable = currentTable.parentNode.removeChild(currentTable);
           pushListResource(detachedTable);
-          console.log('push ' + i);
           tableCount++;
         } else {
           // Dynamic HTML node list. Avoid increment when an item is removed
@@ -74,15 +72,13 @@ angular
         }
       }
 
-      console.log('Found ' + tableCount + ' tables');
       return tableCount;
     };
 
     ListExtractionFactory.extract = function (url) {
-      console.log('extract');
-      var promise = $.getJSON(corsUrl(url))
-        .done(function (response) {
-          var markup = ListExtractionFactory.fixRelativeLinks(url, response.contents);
+      var promise = $http.jsonp(corsUrl(url), {timeout: ListExtractionFactory.TIMEOUT_TIME})
+        .success(function (data) {
+          var markup = ListExtractionFactory.fixRelativeLinks(url, data.contents);
           var tableCount = ListExtractionFactory.getTables(markup);
           ListExtractionFactory.broadcast(tableCount);
         });

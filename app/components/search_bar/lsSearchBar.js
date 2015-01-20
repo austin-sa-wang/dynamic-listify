@@ -47,27 +47,28 @@ angular
     });
 
     this.getTables = function () {
-      //TODO: Refactor - Consolidate error checking
+      // url empty
       if (this.srcUrl === '') {
         _alert.error(EMPTY_URL_MSG);
         return;
       }
-      _alert.warning(PROCESSING_MSG);
+
+      /* HACK: url missing protocol
+       * Potential problem: protocol could be https
+       */
       var regex = /^http/;
       if ( !regex.test(this.srcUrl) ) {
         this.srcUrl = 'http://' + this.srcUrl;
       }
 
+      _alert.warning(PROCESSING_MSG);
+
       ListExtractionFactory.extract(this.srcUrl)
         .success(function() {
-          $timeout(function() {
             _alert.reset();
-          });
         })
         .error(function() {
-          $timeout(function() {
             _alert.error(UNRESPONSIVE_MSG);
-          });
         });
     };
 

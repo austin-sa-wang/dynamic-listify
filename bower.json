@@ -12,8 +12,7 @@
     "angular-animate": "latest",
     "angular-touch": "latest",
     "angular-route": "latest",
-    "angular-bootstrap": "latest",
-    "octicons": "*"
+    "angular-bootstrap": "latest"
   },
   "devDependencies": {
     "angular-mocks": "latest",

@@ -5,16 +5,18 @@ angular
   .module('liveSearchList', [])
 
   .controller('LiveSearchListCtrl', function () {
+    var _this = this;
     this.filterExpr = '';
-    this.display = true;
-    this.icon = 'octicon octicon-chevron-down';
+    this.isListHidden = false;
+    this.listToggleText = 'Hide';
+
     this.toggleList = function () {
-      if (this.display) {
-        this.display = false;
-        this.icon = 'octicon octicon-chevron-right';
+      if (this.isListHidden) {
+        _this.isListHidden = false;
+        _this.listToggleText = 'Hide';
       } else {
-        this.display = true;
-        this.icon = 'octicon octicon-chevron-down';
+        _this.isListHidden = true;
+        _this.listToggleText = 'Show';
       }
     };
   })

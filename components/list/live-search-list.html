@@ -1,4 +1,5 @@
 <hr>
-<button ng-click="ctrl.toggleList()" ng-class="ctrl.icon" id="listToggle" class="btn btn-warning btn-xs"></button>
-<input type="text" class="form-control" ng-model="ctrl.filterExpr" placeholder="Search">
-<div ng-show="ctrl.display" id="listArea"></div>
+<button ng-click="ctrl.toggleList()" id="listToggle" class="btn btn-warning btn-xs">{{ctrl.listToggleText}}</button>
+<span ng-show="ctrl.isListHidden" id="list-hidden-text" class="alert-warning text-center">list hidden</span>
+<input ng-hide="ctrl.isListHidden" type="text" class="form-control" ng-model="ctrl.filterExpr" placeholder="Search">
+<div ng-hide="ctrl.isListHidden" id="list-area"></div>

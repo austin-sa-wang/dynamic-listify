@@ -13,7 +13,8 @@ angular
     'liveSearchList',
     'liveSearchListContainer',
     'lsSearchBar',
-    'ifChrome'
+    'ifChrome',
+    'dependencyUnavailable'
   ]);
 
 

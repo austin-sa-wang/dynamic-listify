@@ -12,7 +12,7 @@ angular
   .module('LiveSearchApp', [
     'liveSearchList',
     'liveSearchListContainer',
-    'lsSearchBar',
+    'lsUrlExtractBar',
     'ifChrome',
     'dependencyUnavailable'
   ]);

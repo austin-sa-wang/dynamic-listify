@@ -1,13 +1,13 @@
 'use strict';
 
 angular
-  .module('lsSearchBar', [
+  .module('lsUrlExtractBar', [
     'listExtractionFactory',
     'ui.bootstrap'
   ])
 
-  .controller('lsSearchBarCtrl', ['$scope', '$timeout', 'ListExtractionFactory', function ($scope, $timeout, ListExtractionFactory) {
-    //TODO: Refactor - Extract status UI out of lsSearchBarCtrl
+  .controller('lsUrlExtractBarCtrl', ['$scope', '$timeout', 'ListExtractionFactory', function ($scope, $timeout, ListExtractionFactory) {
+    //TODO: Refactor - Extract status UI out of lsUrlExtractBarCtrl
     var NO_TABLE_ALERT_MSG = 'No table found on target page. If there IS a table, then the table implementation is not supported. This app finds tables by the HTML <table> element.';
     var PROCESSING_MSG = 'Processing...';
     var UNRESPONSIVE_MSG = 'Target site is unresponsive. Try a different site.';
@@ -83,11 +83,11 @@ angular
 
   }])
 
-  .directive('lsSearchBar', function () {
+  .directive('lsUrlExtractBar', function () {
     return {
       scope: {},
-      templateUrl: 'components/search_bar/ls-search-bar.html',
-      controller: 'lsSearchBarCtrl',
+      templateUrl: 'components/url_extract_bar/ls-url-extract-bar.html',
+      controller: 'lsUrlExtractBarCtrl',
       controllerAs: 'ctrl'
     };
   });

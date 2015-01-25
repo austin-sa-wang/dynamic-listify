@@ -2,9 +2,9 @@ live-search
 ===========
 Web app to extract tables and attach search functionality
 
-Framework
+Framework, Library, Tooling
 ------
-AngularJS
+AngularJS, JQuery Twitter Bootstrap, Bower, Grunt
 
 Design Flaw
 ------

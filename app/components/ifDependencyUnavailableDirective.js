@@ -5,9 +5,9 @@
  * Display error when dependency is offline.
  */
 angular
-  .module('dependencyUnavailable', [])
+  .module('ifDependencyUnavailable', [])
 
-  .directive('dependencyUnavailable', function () {
+  .directive('ifDependencyUnavailable', function () {
     var DEPENDENCY_URL = 'http://www.whateverorigin.org/';
     return {
       compile: function (tElem) {

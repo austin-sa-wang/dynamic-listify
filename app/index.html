@@ -26,7 +26,7 @@
     <h1>Live Search
       <small>Extract tables and attach search functionality</small>
     </h1>
-    <span dependency-unavailable id="dependency-alert" class="h3 text-center hidden bg-danger">This app is currently unavailable.<br> App dependency <a href="http://www.whateverorigin.org/" target="_blank">Whatever Origin</a> is offline.</span>
+    <span if-dependency-unavailable id="dependency-alert" class="h3 text-center hidden bg-danger">This app is currently unavailable.<br> App dependency <a href="http://www.whateverorigin.org/" target="_blank">Whatever Origin</a> is offline.</span>
     <p if-chrome class="hidden bg-info">Due to browser constraint, Chrome users may experience long UI freeze when extracting from a web page the first time.</p>
   </header>
   <div ls-url-extract-bar=""></div>
@@ -85,7 +85,7 @@
 <script src="components/url_extract_bar/lsUrlExtractBar.js"></script>
 <script src="components/tableExtractionFactory.js"></script>
 <script src="components/ifChromeDirective.js"></script>
-<script src="components/dependencyUnavailableDirective.js"></script>
+<script src="components/ifDependencyUnavailableDirective.js"></script>
 <script src="components/tableUtilityFactory.js"></script>
 <!-- endbuild -->
 </body>

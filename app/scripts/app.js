@@ -14,7 +14,7 @@ angular
     'lsTableContainer',
     'lsUrlExtractBar',
     'ifChrome',
-    'dependencyUnavailable'
+    'ifDependencyUnavailable'
   ]);
 
 

@@ -2,7 +2,8 @@
 
 /**
  * Container for the lsTable components
- * Listen to tableExtractionFactory. When tables are ready, add lsTable components onto DOM
+ * Listen to tableExtractionFactory's ready event. When tables are ready, add lsTable components onto DOM.
+ * Provide a table number to notify the lsTable which table to use
  */
 angular
   .module('lsTableContainer', [])

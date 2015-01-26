@@ -7,6 +7,7 @@
  *   - table search bar
  *   - table hide & show toggle
  *
+ * Table data location is passed-in by the table-number attribute of the directive markup, provided by lsTableContainer
  */
 angular
   .module('lsTable', [])
@@ -32,7 +33,7 @@ angular
 
   })
 
-  .directive('lsTable', ['TableExtractionFactory', '$interval', function (TableExtractionFactory, $interval) {
+  .directive('lsTable', ['TableExtractionFactory', '$interval', 'TableUtilityFactory', function (TableExtractionFactory, $interval, TableUtilityFactory) {
     return {
       scope: {
         // Expect srcMarkup to be ready before being added during runtime
@@ -46,7 +47,7 @@ angular
         /**
          * Push table onto DOM. Push table data in chunks to reduce UI freeze (primarily Chrome) caused by heavy DOM redraw.
          * This function replaces the <tbody> node
-         * @param table Table element to be pushed onto DOM
+         * @param {!Element} table Table element to be pushed onto DOM
          */
         var pushTableOntoDom = function (table) {
           var CHUNK_SIZE = 32;
@@ -64,7 +65,7 @@ angular
           element.children('div')[0].appendChild(table);
 
           // Array chunking
-          var chunkList = TableExtractionFactory.breakNodeGroupIntoChunks(tableBody, CHUNK_SIZE);
+          var chunkList = TableUtilityFactory.breakNodeGroupIntoChunks(tableBody, CHUNK_SIZE);
 
           $interval(function(){
             domTbodyNode.appendChild(chunkList.shift());
@@ -98,7 +99,8 @@ angular
 
         /**
          * Update table with filter. Filter by testing the text content of each node. Update css style accordingly.
-         * @param element Target element containing the data to be filtered
+         * @param {!Element} element Target element containing the data to be filtered
+         * @param {String} filterExpr Filter expression to be tested against
          */
         var updateTableWithFilter = function (element, filterExpr) {
           updateDomWithElementRemoved(element, function () {

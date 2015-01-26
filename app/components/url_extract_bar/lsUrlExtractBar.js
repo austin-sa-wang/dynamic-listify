@@ -47,7 +47,9 @@ angular
 
     this.targetUrl = '';
 
-    // Display error when no table is found on the target url
+    /**
+     * Display error when no table is found on the target url
+     */
     TableExtractionFactory.callHandlerWhenTableReady(function (event, tableCount) {
       if (tableCount === 0) {
         $timeout(function() {
@@ -56,6 +58,10 @@ angular
       }
     });
 
+    /**
+     * Check target url and call extract method on TableExtractionFactory.
+     * Manage status update bubble
+     */
     this.getTables = function () {
       // Check url validity. Only http(s) protocol is allowed
       var regex = /^https?:\/\/.+/;
@@ -64,10 +70,9 @@ angular
         return;
       }
 
-      /* Hack: get around intermittent failure when the http request fails immediately (possibly caused by whatever origin)
-       * (cannot differentiate between this and timeout because both callback arguments are empty)
-       * Cancel the timer in the extract error callback. If too soon, throw retry message.
-       */
+      // Hack: get around intermittent failure when the http request fails immediately (possibly caused by whatever origin)
+      //       (cannot differentiate between this and timeout because both callback arguments are empty)
+      //       Cancel the timer in the extract error callback. If too soon, throw retry message.
       var timer = $timeout(function(){}, 1000);
 
       _alert.showWarning(ALERT_MSG.PROCESSING);
@@ -88,7 +93,7 @@ angular
 
     /**
      * Set target url to preset and extract
-     * @param url Extraction target url
+     * @param {String} url Extraction target url
      */
     this.getPresetSite = function(url) {
       this.targetUrl = url;

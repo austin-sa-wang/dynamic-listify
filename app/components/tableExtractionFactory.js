@@ -1,60 +1,42 @@
 'use strict';
 
 /**
- * 
+ * Implements table extraction logic
+ * When extraction is done, pushes the tables onto a list and broadcast a ready event.
  */
 angular
-  .module('tableExtractionFactory', [])
+  .module('tableExtractionFactory', ['tableUtilityFactory'])
 
-  .factory('TableExtractionFactory', ['$http', '$rootScope', function TableExtractionFactory($http, $rootScope) {
+  .factory('TableExtractionFactory', ['$http', '$rootScope', 'TableUtilityFactory', function TableExtractionFactory($http, $rootScope, TableUtilityFactory) {
     TableExtractionFactory.TABLE_READY_EVENT = 'table:ready';
     TableExtractionFactory.HTTP_REQUEST_TIMEOUT = 2000;
     TableExtractionFactory.MIN_TABLE_ROW_COUNT_TO_QUALITY = 10;
 
     TableExtractionFactory.tables = [];
 
+    /**
+     * Prepare the url for Whatever Origin JSONP request to overcome CORS restriction
+     * @param {string} url Target url
+     * @returns {string} JSONP request url
+     */
     var corsUrl = function (url) {
       return 'http://whateverorigin.org/get?url=' + encodeURIComponent(url) + '&callback=JSON_CALLBACK';
     };
 
-    var pushTable = function (tableElement) {
-      TableExtractionFactory.tables.push(tableElement);
-    };
-
-    /**
-     *
-     * @param data
-     */
-    TableExtractionFactory.broadcastTableReady = function (data) {
-      $rootScope.$broadcast(TableExtractionFactory.TABLE_READY_EVENT, data);
+    TableExtractionFactory.broadcastTableReady = function (tableCount) {
+      $rootScope.$broadcast(TableExtractionFactory.TABLE_READY_EVENT, tableCount);
     };
 
     TableExtractionFactory.callHandlerWhenTableReady = function (callback) {
       $rootScope.$on(TableExtractionFactory.TABLE_READY_EVENT, callback);
     };
 
-    TableExtractionFactory.fixRelativeLinks = function (url, markup) {
-      var link = document.createElement('a');
-      link.href = url;
-      var hostname = link.hostname;
-
-      var httpPrefix = '';
-      if (url.search('https://') !== -1) {
-        httpPrefix = 'https://';
-      } else if (url.search('http://') !== -1) {
-        httpPrefix = 'http://';
-      }
-
-      var aRegex = /href="\//g;
-      var a = 'href=\"' + httpPrefix + hostname + '/';
-      var imgRegex = /src="\//g;
-      var img = 'src=\"' + httpPrefix + hostname + '/';
-      var newMarkup = markup.replace(aRegex, a);
-      newMarkup = newMarkup.replace(imgRegex, img);
-
-      return newMarkup;
-    };
-
+    /**
+     * Locate tables in markup. Use HTMLElement to do this. (Alternative: parse the markup manually)
+     * Push table HTMLElement tree onto list of tables. Return the number of tables found.
+     * @param {String} markup
+     * @returns {number} tableCount Number of tables found
+     */
     TableExtractionFactory.getTables = function (markup) {
       var tableCount = 0;
 
@@ -71,48 +53,29 @@ angular
         childCount = currentTable.getElementsByTagName('tbody')[0].children.length;
         if (childCount > TableExtractionFactory.MIN_TABLE_ROW_COUNT_TO_QUALITY) {
           detachedTable = currentTable.parentNode.removeChild(currentTable);
-          pushTable(detachedTable);
+          TableExtractionFactory.tables.push(detachedTable);
           tableCount++;
         } else {
           // Dynamic HTML node list. Avoid increment when an item is removed
           i++;
         }
       }
-
       return tableCount;
     };
 
+    /**
+     * Extract tables from the url
+     * @param {String} url Target url
+     * @returns {Promise} promise Promise to the http request
+     */
     TableExtractionFactory.extract = function (url) {
       var promise = $http.jsonp(corsUrl(url), {timeout: TableExtractionFactory.HTTP_REQUEST_TIMEOUT})
         .success(function (data) {
-          var markup = TableExtractionFactory.fixRelativeLinks(url, data.contents);
+          var markup = TableUtilityFactory.fixRelativeLinks(url, data.contents);
           var tableCount = TableExtractionFactory.getTables(markup);
           TableExtractionFactory.broadcastTableReady(tableCount);
         });
       return promise;
-    };
-
-    TableExtractionFactory.breakNodeGroupIntoChunks = function (container, chunkSize) {
-      var children = container.children;
-      var chunkList = [];
-      var currentSplit, count;
-      while(children.length > 0) {
-        currentSplit = document.createDocumentFragment();
-
-        if (children.length > chunkSize) {
-          count = chunkSize;
-        } else {
-          count = children.length;
-        }
-
-        while (count > 0) {
-          currentSplit.appendChild(children[0]);
-          count--;
-        }
-
-        chunkList.push(currentSplit);
-      }
-      return chunkList;
     };
 
     return TableExtractionFactory;

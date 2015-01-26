@@ -1,5 +1,9 @@
 'use strict';
 
+/**
+ * Test dependency server status.
+ * Display error when dependency is offline.
+ */
 angular
   .module('dependencyUnavailable', [])
 

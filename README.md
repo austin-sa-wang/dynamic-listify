@@ -21,7 +21,7 @@ Utilities for table operations
 * fixRelativeLinks - for relative links which would break because no long on intended host
 * breakNodeGroupIntoChunks - for array chunking
 
-#####dependencyUnavailable directive
+#####ifDependencyUnavailable directive
 Test dependency server status. Display error when dependency is offline.
 
 #####ifChrome directive

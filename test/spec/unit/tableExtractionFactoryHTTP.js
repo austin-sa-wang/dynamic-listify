@@ -1,6 +1,6 @@
 'use strict';
 
-describe('listExtractionFactory http logic', function() {
+describe('tableExtractionFactory http logic', function() {
   var TARGET_URL = 'http://test.com';
   var EXPECTED_URL = 'http://whateverorigin.org/get?url=' + encodeURIComponent(TARGET_URL) + '&callback=JSON_CALLBACK';
   var FULFILLED_DATA = {
@@ -13,11 +13,11 @@ describe('listExtractionFactory http logic', function() {
   var $q,
     $rootScope,
     $httpBackend,
-    ListExtractionFactory,
+    TableExtractionFactory,
     authRequestHandler;
 
   // load modules
-  beforeEach(module('listExtractionFactory'));
+  beforeEach(module('tableExtractionFactory'));
 
   beforeEach(inject(function($injector) {
     $httpBackend = $injector.get('$httpBackend');
@@ -27,10 +27,10 @@ describe('listExtractionFactory http logic', function() {
 
     $rootScope = $injector.get('$rootScope');
     $q = $injector.get('$q');
-    ListExtractionFactory = $injector.get('ListExtractionFactory');
+    TableExtractionFactory = $injector.get('TableExtractionFactory');
 
     // Override timeout time
-    ListExtractionFactory.HTTP_REQUEST_TIMEOUT = 300;
+    TableExtractionFactory.HTTP_REQUEST_TIMEOUT = 300;
   }));
 
   afterEach(function() {
@@ -40,7 +40,7 @@ describe('listExtractionFactory http logic', function() {
 
   it('make JSON request', function () {
     $httpBackend.expectJSONP(EXPECTED_URL);
-    ListExtractionFactory.extract(TARGET_URL);
+    TableExtractionFactory.extract(TARGET_URL);
     $httpBackend.flush();
   });
 
@@ -70,7 +70,7 @@ describe('listExtractionFactory http logic', function() {
     };
 
     var callTimedJsonpFactoryGet = function () {
-      return ListExtractionFactory.extract(TARGET_URL)
+      return TableExtractionFactory.extract(TARGET_URL)
         .success(
         function (data) {
           fulfilledData = data;
@@ -99,7 +99,7 @@ describe('listExtractionFactory http logic', function() {
      */
     describe('when timeout', function() {
       beforeEach(function(done) {
-        var timeAfterTimeout = ListExtractionFactory.HTTP_REQUEST_TIMEOUT + 100;
+        var timeAfterTimeout = TableExtractionFactory.HTTP_REQUEST_TIMEOUT + 100;
         callTimedJsonpFactoryGet();
 
         setTimeout(function() {
@@ -121,7 +121,7 @@ describe('listExtractionFactory http logic', function() {
 
     describe('when delayed response before timeout', function() {
       beforeEach(function(done) {
-        var timeBeforeTimeout = ListExtractionFactory.HTTP_REQUEST_TIMEOUT - 100;
+        var timeBeforeTimeout = TableExtractionFactory.HTTP_REQUEST_TIMEOUT - 100;
         callTimedJsonpFactoryGet();
 
         setTimeout(function() {

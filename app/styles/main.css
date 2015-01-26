@@ -9,13 +9,13 @@
   padding-top: 3px;
 }
 
-#listToggle {
+#table-toggle {
   border-bottom: none;
   position: relative;
   margin-left: 3px;
 }
 
-#list-hidden-text {
+#table-hidden-hint {
   display: block;
   margin-top: 1px;
   border: 1px solid;

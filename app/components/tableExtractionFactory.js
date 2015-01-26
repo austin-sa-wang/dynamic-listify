@@ -1,36 +1,36 @@
 'use strict';
 
 angular
-  .module('listExtractionFactory', [])
+  .module('tableExtractionFactory', [])
 
-  .factory('ListExtractionFactory', ['$http', '$rootScope', function ListExtractionFactory($http, $rootScope) {
-    ListExtractionFactory.LIST_READY_EVENT = 'lists:ready';
-    ListExtractionFactory.HTTP_REQUEST_TIMEOUT = 2000;
-    ListExtractionFactory.MIN_TABLE_ROW_COUNT_TO_QUALITY = 10;
+  .factory('TableExtractionFactory', ['$http', '$rootScope', function TableExtractionFactory($http, $rootScope) {
+    TableExtractionFactory.TABLE_READY_EVENT = 'table:ready';
+    TableExtractionFactory.HTTP_REQUEST_TIMEOUT = 2000;
+    TableExtractionFactory.MIN_TABLE_ROW_COUNT_TO_QUALITY = 10;
 
-    ListExtractionFactory.lists = [];
+    TableExtractionFactory.tables = [];
 
     var corsUrl = function (url) {
       return 'http://whateverorigin.org/get?url=' + encodeURIComponent(url) + '&callback=JSON_CALLBACK';
     };
 
-    var pushListResource = function (tableElement) {
-      ListExtractionFactory.lists.push(tableElement);
+    var pushTable = function (tableElement) {
+      TableExtractionFactory.tables.push(tableElement);
     };
 
     /**
      *
      * @param data
      */
-    ListExtractionFactory.broadcastListReady = function (data) {
-      $rootScope.$broadcast(ListExtractionFactory.LIST_READY_EVENT, data);
+    TableExtractionFactory.broadcastTableReady = function (data) {
+      $rootScope.$broadcast(TableExtractionFactory.TABLE_READY_EVENT, data);
     };
 
-    ListExtractionFactory.triggerWhenListReady = function (callback) {
-      $rootScope.$on(ListExtractionFactory.LIST_READY_EVENT, callback);
+    TableExtractionFactory.triggerWhenTableReady = function (callback) {
+      $rootScope.$on(TableExtractionFactory.TABLE_READY_EVENT, callback);
     };
 
-    ListExtractionFactory.fixRelativeLinks = function (url, markup) {
+    TableExtractionFactory.fixRelativeLinks = function (url, markup) {
       var link = document.createElement('a');
       link.href = url;
       var hostname = link.hostname;
@@ -52,23 +52,23 @@ angular
       return newMarkup;
     };
 
-    ListExtractionFactory.getTables = function (markup) {
+    TableExtractionFactory.getTables = function (markup) {
       var tableCount = 0;
 
       var domHead = document.createElement('div');
       domHead.innerHTML = markup;
       var tableList = domHead.getElementsByTagName('table');
 
-      ListExtractionFactory.lists = [];
+      TableExtractionFactory.tables = [];
 
-      // Find table with qualifying child count, remove it from dom, and push it onto lists
+      // Find table with qualifying child count, remove it from dom, and push it onto tables
       var currentTable, childCount, detachedTable;
       for (var i = 0; i < tableList.length;) {
         currentTable = tableList[i];
         childCount = currentTable.getElementsByTagName('tbody')[0].children.length;
-        if (childCount > ListExtractionFactory.MIN_TABLE_ROW_COUNT_TO_QUALITY) {
+        if (childCount > TableExtractionFactory.MIN_TABLE_ROW_COUNT_TO_QUALITY) {
           detachedTable = currentTable.parentNode.removeChild(currentTable);
-          pushListResource(detachedTable);
+          pushTable(detachedTable);
           tableCount++;
         } else {
           // Dynamic HTML node list. Avoid increment when an item is removed
@@ -79,31 +79,31 @@ angular
       return tableCount;
     };
 
-    ListExtractionFactory.extract = function (url) {
-      var promise = $http.jsonp(corsUrl(url), {timeout: ListExtractionFactory.HTTP_REQUEST_TIMEOUT})
+    TableExtractionFactory.extract = function (url) {
+      var promise = $http.jsonp(corsUrl(url), {timeout: TableExtractionFactory.HTTP_REQUEST_TIMEOUT})
         .success(function (data) {
-          var markup = ListExtractionFactory.fixRelativeLinks(url, data.contents);
-          var tableCount = ListExtractionFactory.getTables(markup);
-          ListExtractionFactory.broadcastListReady(tableCount);
+          var markup = TableExtractionFactory.fixRelativeLinks(url, data.contents);
+          var tableCount = TableExtractionFactory.getTables(markup);
+          TableExtractionFactory.broadcastTableReady(tableCount);
         });
       return promise;
     };
 
-    ListExtractionFactory.breakNodeGroupIntoChunks = function (container, chunkSize) {
-      var childrenList = container.children;
+    TableExtractionFactory.breakNodeGroupIntoChunks = function (container, chunkSize) {
+      var children = container.children;
       var chunkList = [];
       var currentSplit, count;
-      while(childrenList.length > 0) {
+      while(children.length > 0) {
         currentSplit = document.createDocumentFragment();
 
-        if (childrenList.length > chunkSize) {
+        if (children.length > chunkSize) {
           count = chunkSize;
         } else {
-          count = childrenList.length;
+          count = children.length;
         }
 
         while (count > 0) {
-          currentSplit.appendChild(childrenList[0]);
+          currentSplit.appendChild(children[0]);
           count--;
         }
 
@@ -112,5 +112,5 @@ angular
       return chunkList;
     };
 
-    return ListExtractionFactory;
+    return TableExtractionFactory;
   }]);

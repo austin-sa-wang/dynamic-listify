@@ -1,30 +1,30 @@
 'use strict';
 /*global $:false */
 
-describe('listExtractionFactory', function() {
+describe('tableExtractionFactory', function() {
   var URL = 'base/test/fixtures/fullSample.html';
   var EXPECTED_EVENT_NAME;
-  var ListExtractionFactory,
+  var TableExtractionFactory,
     $rootScope;
 
   // load modules
-  beforeEach(module('listExtractionFactory'));
+  beforeEach(module('tableExtractionFactory'));
 
-  beforeEach(inject(function(_$rootScope_, _ListExtractionFactory_) {
+  beforeEach(inject(function(_$rootScope_, _TableExtractionFactory_) {
     $rootScope = _$rootScope_;
-    ListExtractionFactory = _ListExtractionFactory_;
-    EXPECTED_EVENT_NAME = ListExtractionFactory.LIST_READY_EVENT;
+    TableExtractionFactory = _TableExtractionFactory_;
+    EXPECTED_EVENT_NAME = TableExtractionFactory.TABLE_READY_EVENT;
 
     // Override min count to quality for the test sample
-    ListExtractionFactory.MIN_TABLE_ROW_COUNT_TO_QUALITY = 3;
+    TableExtractionFactory.MIN_TABLE_ROW_COUNT_TO_QUALITY = 3;
   }));
 
-  it('check the existence of ListExtractionFactory factory', function () {
-    expect(ListExtractionFactory).toBeDefined();
+  it('check the existence of TableExtractionFactory factory', function () {
+    expect(TableExtractionFactory).toBeDefined();
   });
 
-  it('.triggerWhenListReady method should subscribe to the correct event', function (done) {
-    ListExtractionFactory.triggerWhenListReady(function (event) {
+  it('.triggerWhenTableReady method should subscribe to the correct event', function (done) {
+    TableExtractionFactory.triggerWhenTableReady(function (event) {
       expect(event.name).toEqual(EXPECTED_EVENT_NAME);
       done();
     });
@@ -34,7 +34,7 @@ describe('listExtractionFactory', function() {
   it('broadcast correct event', function () {
     var arbitraryNumber = 0;
     spyOn($rootScope, '$broadcast');
-    ListExtractionFactory.broadcastListReady(arbitraryNumber);
+    TableExtractionFactory.broadcastTableReady(arbitraryNumber);
     expect($rootScope.$broadcast).toHaveBeenCalledWith(EXPECTED_EVENT_NAME, jasmine.any(Number));
   });
 
@@ -49,14 +49,14 @@ describe('listExtractionFactory', function() {
     });
 
     it('determine correct table count', function () {
-      var tableCount = ListExtractionFactory.getTables(markup);
+      var tableCount = TableExtractionFactory.getTables(markup);
       expect(tableCount).toEqual(2);
     });
 
-    it('make list content available', function() {
-      ListExtractionFactory.getTables(markup);
-      expect(ListExtractionFactory.lists[0].getElementsByTagName('tbody')[0].children.length).toEqual(4);
-      expect(ListExtractionFactory.lists[1].getElementsByTagName('tbody')[0].children.length).toEqual(6);
+    it('make table content available', function() {
+      TableExtractionFactory.getTables(markup);
+      expect(TableExtractionFactory.tables[0].getElementsByTagName('tbody')[0].children.length).toEqual(4);
+      expect(TableExtractionFactory.tables[1].getElementsByTagName('tbody')[0].children.length).toEqual(6);
     });
   });
 
@@ -68,7 +68,7 @@ describe('listExtractionFactory', function() {
     var tbody = document.createElement('tbody');
     tbody.innerHTML = markup;
 
-    var fragList = ListExtractionFactory.breakNodeGroupIntoChunks(tbody, 2);
+    var fragList = TableExtractionFactory.breakNodeGroupIntoChunks(tbody, 2);
     //console.log(fragList[0]);
     expect(fragList.length).toEqual(2);
     expect(fragList[0].childNodes[0].innerText).toEqual('data00');
@@ -81,7 +81,7 @@ describe('listExtractionFactory', function() {
       '<tr><td><a href="/child">text</a><img src="/img"></td></tr></tbody>';
     var url = 'http://text.com/page';
 
-    var newMarkup = ListExtractionFactory.fixRelativeLinks(url, markup);
+    var newMarkup = TableExtractionFactory.fixRelativeLinks(url, markup);
     expect(newMarkup).toEqual('<thead></thead><tbody><tr><td><a href="http://text.com/child">text</a><img src="http://text.com/img"></td></tr>' +
       '<tr><td><a href="http://text.com/child">text</a><img src="http://text.com/img"></td></tr></tbody>');
   });

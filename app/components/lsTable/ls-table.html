@@ -1,0 +1,5 @@
+<hr>
+<button ng-click="ctrl.tableToggle.toggle()" id="table-toggle" class="btn btn-warning btn-xs">{{ctrl.tableToggle.buttonText}}</button>
+<span ng-show="ctrl.tableToggle.isTableHidden" id="table-hidden-hint" class="alert-warning text-center">table hidden</span>
+<input ng-hide="ctrl.tableToggle.isTableHidden" type="text" class="form-control" ng-model="ctrl.filterExpr" placeholder="Search">
+<div ng-hide="ctrl.tableToggle.isTableHidden"></div>

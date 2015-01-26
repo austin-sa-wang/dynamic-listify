@@ -10,8 +10,8 @@
  */
 angular
   .module('LiveSearchApp', [
-    'liveSearchList',
-    'liveSearchListContainer',
+    'lsTable',
+    'lsTableContainer',
     'lsUrlExtractBar',
     'ifChrome',
     'dependencyUnavailable'

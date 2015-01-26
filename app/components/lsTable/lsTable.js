@@ -2,16 +2,16 @@
 /*global $:false */
 
 /**
- * liveSearchList component is consisted of the following elements:
+ * lsTable component is consisted of the following elements:
  *   - table
  *   - table search bar
  *   - table hide & show toggle
  *
  */
 angular
-  .module('liveSearchList', [])
+  .module('lsTable', [])
 
-  .controller('LiveSearchListCtrl', function () {
+  .controller('lsTableCtrl', function () {
     this.filterExpr = '';
 
     // hide & show toggle view model
@@ -32,14 +32,14 @@ angular
 
   })
 
-  .directive('liveSearchList', ['ListExtractionFactory', '$interval', function (ListExtractionFactory, $interval) {
+  .directive('lsTable', ['TableExtractionFactory', '$interval', function (TableExtractionFactory, $interval) {
     return {
       scope: {
         // Expect srcMarkup to be ready before being added during runtime
-        listNumber: '@'
+        tableNumber: '@'
       },
-      templateUrl: 'components/list/live-search-list.html',
-      controller: 'LiveSearchListCtrl',
+      templateUrl: 'components/lsTable/ls-table.html',
+      controller: 'lsTableCtrl',
       controllerAs: 'ctrl',
       link: function (scope, element) {
 
@@ -52,10 +52,10 @@ angular
           var CHUNK_SIZE = 32;
           var DOM_PUSH_INTERVAL = 150;
 
-          var listContent = table.getElementsByTagName('tbody')[0];
+          var tableBody = table.getElementsByTagName('tbody')[0];
 
-          // Detach data from table. Push data onto DOM in chunks later
-          table.removeChild(listContent);
+          // Detach body from table. Push data onto DOM in chunks later
+          table.removeChild(tableBody);
 
           // Create empty tbody to host table data
           var domTbodyNode = document.createElement('tbody');
@@ -64,7 +64,7 @@ angular
           element.children('div')[0].appendChild(table);
 
           // Array chunking
-          var chunkList = ListExtractionFactory.breakNodeGroupIntoChunks(listContent, CHUNK_SIZE);
+          var chunkList = TableExtractionFactory.breakNodeGroupIntoChunks(tableBody, CHUNK_SIZE);
 
           $interval(function(){
             domTbodyNode.appendChild(chunkList.shift());
@@ -117,7 +117,7 @@ angular
           });
         };
 
-        var table = ListExtractionFactory.lists[scope.listNumber];
+        var table = TableExtractionFactory.tables[scope.tableNumber];
 
         // Table pre-process: Add Bootstrap table style
         table.classList.add('table');

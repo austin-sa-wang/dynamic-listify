@@ -2,11 +2,11 @@
 
 angular
   .module('lsUrlExtractBar', [
-    'listExtractionFactory',
+    'tableExtractionFactory',
     'ui.bootstrap'
   ])
 
-  .controller('lsUrlExtractBarCtrl', ['$scope', '$timeout', 'ListExtractionFactory', function ($scope, $timeout, ListExtractionFactory) {
+  .controller('lsUrlExtractBarCtrl', ['$scope', '$timeout', 'TableExtractionFactory', function ($scope, $timeout, TableExtractionFactory) {
     var ALERT_MSG = {
       PROCESSING: 'Processing...',
       NO_TABLE: 'No table found on target page. If there IS a table, then the table implementation is not supported. This app finds tables by the HTML <table> element.',
@@ -41,7 +41,7 @@ angular
     this.targetUrl = '';
 
     // Listen to extraction completion broadcast
-    ListExtractionFactory.triggerWhenListReady(function (event, tableCount) {
+    TableExtractionFactory.triggerWhenTableReady(function (event, tableCount) {
       if (tableCount === 0) {
         $timeout(function() {
           _alert.showWarning(ALERT_MSG.NO_TABLE);
@@ -64,7 +64,7 @@ angular
       var timer = $timeout(function(){}, 1000);
 
       _alert.showWarning(ALERT_MSG.PROCESSING);
-      ListExtractionFactory.extract(this.targetUrl)
+      TableExtractionFactory.extract(this.targetUrl)
         .success(function() {
             _alert.hide();
         })

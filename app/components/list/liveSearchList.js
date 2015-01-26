@@ -1,24 +1,35 @@
 'use strict';
 /*global $:false */
 
+/**
+ * liveSearchList component is consisted of the following elements:
+ *   - table
+ *   - table search bar
+ *   - table hide & show toggle
+ *
+ */
 angular
   .module('liveSearchList', [])
 
   .controller('LiveSearchListCtrl', function () {
-    var _this = this;
     this.filterExpr = '';
-    this.isListHidden = false;
-    this.listToggleText = 'Hide';
 
-    this.toggleList = function () {
-      if (this.isListHidden) {
-        _this.isListHidden = false;
-        _this.listToggleText = 'Hide';
-      } else {
-        _this.isListHidden = true;
-        _this.listToggleText = 'Show';
+    // hide & show toggle view model
+    this.tableToggle = {
+      isTableHidden: false,
+      buttonText: 'Hide',
+
+      toggle: function () {
+        if (this.isTableHidden) {
+          this.isTableHidden = false;
+          this.buttonText = 'Hide';
+        } else {
+          this.isTableHidden = true;
+          this.buttonText = 'Show';
+        }
       }
     };
+
   })
 
   .directive('liveSearchList', ['ListExtractionFactory', '$interval', function (ListExtractionFactory, $interval) {
@@ -32,14 +43,32 @@ angular
       controllerAs: 'ctrl',
       link: function (scope, element) {
 
-        var pushTableDataOntoTbody = function (tbodyNode, tableData) {
-          var BLOCK_SIZE = 32;
+        /**
+         * Push table onto DOM. Push table data in chunks to reduce UI freeze (primarily Chrome) caused by heavy DOM redraw.
+         * This function replaces the <tbody> node
+         * @param table Table element to be pushed onto DOM
+         */
+        var pushTableOntoDom = function (table) {
+          var CHUNK_SIZE = 32;
           var DOM_PUSH_INTERVAL = 150;
 
-          var fragList = ListExtractionFactory.breakTableBodyIntoFragments(tableData, BLOCK_SIZE);
+          var listContent = table.getElementsByTagName('tbody')[0];
+
+          // Detach data from table. Push data onto DOM in chunks later
+          table.removeChild(listContent);
+
+          // Create empty tbody to host table data
+          var domTbodyNode = document.createElement('tbody');
+          table.appendChild(domTbodyNode);
+
+          element.children('div')[0].appendChild(table);
+
+          // Array chunking
+          var chunkList = ListExtractionFactory.breakNodeGroupIntoChunks(listContent, CHUNK_SIZE);
+
           $interval(function(){
-            tbodyNode.appendChild(fragList.shift());
-          }, DOM_PUSH_INTERVAL, fragList.length);
+            domTbodyNode.appendChild(chunkList.shift());
+          }, DOM_PUSH_INTERVAL, chunkList.length);
         };
 
         /**
@@ -67,16 +96,19 @@ angular
           return retval;
         };
 
-        var updateListWithHTMLDisplay = function (element) {
+        /**
+         * Update table with filter. Filter by testing the text content of each node. Update css style accordingly.
+         * @param element Target element containing the data to be filtered
+         */
+        var updateTableWithFilter = function (element, filterExpr) {
           updateDomWithElementRemoved(element, function () {
-            var regex = new RegExp(scope.ctrl.filterExpr, 'i');
-            var listChildren = element.children;
+            var regex = new RegExp(filterExpr, 'i');
+            var dataNodes = element.children;
             var currentNode;
 
-            // Remove filtered nodes
-            for (var i = 0; i < listChildren.length; i++) {
-              currentNode = $(listChildren[i]);
-              if (!regex.exec(currentNode.text())) {
+            for (var i = 0; i < dataNodes.length; i++) {
+              currentNode = $(dataNodes[i]);
+              if (!regex.test(currentNode.text())) {
                 currentNode.css('display', 'none');
               } else {
                 currentNode.css('display', '');
@@ -85,31 +117,25 @@ angular
           });
         };
 
-        var domContainerNode = element.children('div')[0];
-        var list = ListExtractionFactory.lists[scope.listNumber];
-        var listContent = list.getElementsByTagName('tbody')[0];
+        var table = ListExtractionFactory.lists[scope.listNumber];
 
-        // Add Bootstrap table style
-        list.classList.add('table');
-        list.classList.add('table-condensed');
+        // Table pre-process: Add Bootstrap table style
+        table.classList.add('table');
+        table.classList.add('table-condensed');
 
-        // If present, move <th> in <tbody> to <thead>
-        var firstRow = listContent.children[0];
+        // Table pre-process: Move misplaced <th> in <tbody> to <thead>
+        var firstRow = table.getElementsByTagName('tbody')[0].children[0];
         if (firstRow.children[0].tagName === 'TH') {
-          var thead = list.appendChild(document.createElement('thead'));
+          var thead = table.appendChild(document.createElement('thead'));
           thead.appendChild(firstRow);
         }
 
-        // Push table with empty table body onto DOM
-        var tbodyNode = document.createElement('tbody');
-        list.removeChild(listContent);
-        list.appendChild(tbodyNode);
-        domContainerNode.appendChild(list);
+        pushTableOntoDom(table);
 
-        pushTableDataOntoTbody(tbodyNode, listContent);
-
+        // Get reference to the new tbody node, as the original one is replaced in pushTableOntoDom function call
+        var tableBody = table.getElementsByTagName('tbody')[0];
         scope.$watch('ctrl.filterExpr', function () {
-          updateListWithHTMLDisplay(tbodyNode);
+          updateTableWithFilter(tableBody, scope.ctrl.filterExpr);
         });
       }
     };

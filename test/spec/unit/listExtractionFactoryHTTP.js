@@ -30,7 +30,7 @@ describe('listExtractionFactory http logic', function() {
     ListExtractionFactory = $injector.get('ListExtractionFactory');
 
     // Override timeout time
-    ListExtractionFactory.TIMEOUT_TIME = 300;
+    ListExtractionFactory.HTTP_REQUEST_TIMEOUT = 300;
   }));
 
   afterEach(function() {
@@ -99,7 +99,7 @@ describe('listExtractionFactory http logic', function() {
      */
     describe('when timeout', function() {
       beforeEach(function(done) {
-        var timeAfterTimeout = ListExtractionFactory.TIMEOUT_TIME + 100;
+        var timeAfterTimeout = ListExtractionFactory.HTTP_REQUEST_TIMEOUT + 100;
         callTimedJsonpFactoryGet();
 
         setTimeout(function() {
@@ -121,7 +121,7 @@ describe('listExtractionFactory http logic', function() {
 
     describe('when delayed response before timeout', function() {
       beforeEach(function(done) {
-        var timeBeforeTimeout = ListExtractionFactory.TIMEOUT_TIME - 100;
+        var timeBeforeTimeout = ListExtractionFactory.HTTP_REQUEST_TIMEOUT - 100;
         callTimedJsonpFactoryGet();
 
         setTimeout(function() {

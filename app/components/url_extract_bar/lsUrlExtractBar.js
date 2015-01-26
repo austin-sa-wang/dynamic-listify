@@ -7,42 +7,44 @@ angular
   ])
 
   .controller('lsUrlExtractBarCtrl', ['$scope', '$timeout', 'ListExtractionFactory', function ($scope, $timeout, ListExtractionFactory) {
-    //TODO: Refactor - Extract status UI out of lsUrlExtractBarCtrl
-    var NO_TABLE_ALERT_MSG = 'No table found on target page. If there IS a table, then the table implementation is not supported. This app finds tables by the HTML <table> element.';
-    var PROCESSING_MSG = 'Processing...';
-    var UNRESPONSIVE_MSG = 'Target site is unresponsive. Try a different site.';
-    var FAST_FAIL_MSG = 'There\'s a slight hiccup with the request. It should work within 3 tries. (The issue is being resolved)';
-    var NOT_HTTP_MSG = 'Invalid URL. Note: The url should be preceded with http(s)://';
+    var ALERT_MSG = {
+      PROCESSING: 'Processing...',
+      NO_TABLE: 'No table found on target page. If there IS a table, then the table implementation is not supported. This app finds tables by the HTML <table> element.',
+      UNRESPONSIVE: 'Target site is unresponsive. Try a different site.',
+      FAST_FAIL: 'There\'s a slight hiccup with the request. It should work within 3 tries. (The issue is being resolved)',
+      NOT_HTTP: 'Invalid URL. Note: The url should be preceded with http(s)://'
+    };
 
-    this.srcUrl = '';
     this.alert = {
       show: false,
       type: '',
       msg: '',
 
-      reset: function () {
+      hide: function () {
         this.show = false;
       },
 
-      warning: function (msg) {
+      showWarning: function (msg) {
         this.show = true;
         this.type = '';
         this.msg = msg;
       },
 
-      error: function (msg) {
+      showError: function (msg) {
         this.show = true;
         this.type = 'danger';
         this.msg = msg;
       }
     };
-
     var _alert = this.alert;
 
-    ListExtractionFactory.listen(function (event, data) {
-      if (data === 0) {
+    this.targetUrl = '';
+
+    // Listen to extraction completion broadcast
+    ListExtractionFactory.triggerWhenListReady(function (event, tableCount) {
+      if (tableCount === 0) {
         $timeout(function() {
-          _alert.warning(NO_TABLE_ALERT_MSG);
+          _alert.showWarning(ALERT_MSG.NO_TABLE);
         });
       }
     });
@@ -50,8 +52,8 @@ angular
     this.getTables = function () {
       // Check url validity. Only http(s) protocol is allowed
       var regex = /^https?:\/\/.+/;
-      if ( !regex.test(this.srcUrl) ) {
-        _alert.error(NOT_HTTP_MSG);
+      if ( !regex.test(this.targetUrl) ) {
+        _alert.showError(ALERT_MSG.NOT_HTTP);
         return;
       }
 
@@ -61,23 +63,23 @@ angular
        */
       var timer = $timeout(function(){}, 1000);
 
-      _alert.warning(PROCESSING_MSG);
-      ListExtractionFactory.extract(this.srcUrl)
+      _alert.showWarning(ALERT_MSG.PROCESSING);
+      ListExtractionFactory.extract(this.targetUrl)
         .success(function() {
-            _alert.reset();
+            _alert.hide();
         })
         .error(function() {
           // HACK: Part of the Hack described above
           if ($timeout.cancel(timer)) {
-            _alert.error(FAST_FAIL_MSG);
+            _alert.showError(ALERT_MSG.FAST_FAIL);
           } else {
-            _alert.error(UNRESPONSIVE_MSG);
+            _alert.showError(ALERT_MSG.UNRESPONSIVE);
           }
         });
     };
 
     this.getPresetSite = function(url) {
-      this.srcUrl = url;
+      this.targetUrl = url;
       this.getTables();
     };
 

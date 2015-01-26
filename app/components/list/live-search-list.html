@@ -1,5 +1,5 @@
 <hr>
-<button ng-click="ctrl.toggleList()" id="listToggle" class="btn btn-warning btn-xs">{{ctrl.listToggleText}}</button>
-<span ng-show="ctrl.isListHidden" id="list-hidden-text" class="alert-warning text-center">list hidden</span>
-<input ng-hide="ctrl.isListHidden" type="text" class="form-control" ng-model="ctrl.filterExpr" placeholder="Search">
-<div ng-hide="ctrl.isListHidden" id="list-area"></div>
+<button ng-click="ctrl.tableToggle.toggle()" id="listToggle" class="btn btn-warning btn-xs">{{ctrl.tableToggle.buttonText}}</button>
+<span ng-show="ctrl.tableToggle.isTableHidden" id="list-hidden-text" class="alert-warning text-center">list hidden</span>
+<input ng-hide="ctrl.tableToggle.isTableHidden" type="text" class="form-control" ng-model="ctrl.filterExpr" placeholder="Search">
+<div ng-hide="ctrl.tableToggle.isTableHidden" id="list-area"></div>

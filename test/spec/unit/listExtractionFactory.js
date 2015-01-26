@@ -13,18 +13,18 @@ describe('listExtractionFactory', function() {
   beforeEach(inject(function(_$rootScope_, _ListExtractionFactory_) {
     $rootScope = _$rootScope_;
     ListExtractionFactory = _ListExtractionFactory_;
-    EXPECTED_EVENT_NAME = ListExtractionFactory.EVENT_NAME;
+    EXPECTED_EVENT_NAME = ListExtractionFactory.LIST_READY_EVENT;
 
     // Override min count to quality for the test sample
-    ListExtractionFactory.MIN_CHILD_COUNT_TO_QUALITY = 3;
+    ListExtractionFactory.MIN_TABLE_ROW_COUNT_TO_QUALITY = 3;
   }));
 
   it('check the existence of ListExtractionFactory factory', function () {
     expect(ListExtractionFactory).toBeDefined();
   });
 
-  it('.listen method should subscribe to the correct event', function (done) {
-    ListExtractionFactory.listen(function (event) {
+  it('.triggerWhenListReady method should subscribe to the correct event', function (done) {
+    ListExtractionFactory.triggerWhenListReady(function (event) {
       expect(event.name).toEqual(EXPECTED_EVENT_NAME);
       done();
     });
@@ -34,7 +34,7 @@ describe('listExtractionFactory', function() {
   it('broadcast correct event', function () {
     var arbitraryNumber = 0;
     spyOn($rootScope, '$broadcast');
-    ListExtractionFactory.broadcast(arbitraryNumber);
+    ListExtractionFactory.broadcastListReady(arbitraryNumber);
     expect($rootScope.$broadcast).toHaveBeenCalledWith(EXPECTED_EVENT_NAME, jasmine.any(Number));
   });
 
@@ -68,7 +68,7 @@ describe('listExtractionFactory', function() {
     var tbody = document.createElement('tbody');
     tbody.innerHTML = markup;
 
-    var fragList = ListExtractionFactory.breakTableBodyIntoFragments(tbody, 2);
+    var fragList = ListExtractionFactory.breakNodeGroupIntoChunks(tbody, 2);
     //console.log(fragList[0]);
     expect(fragList.length).toEqual(2);
     expect(fragList[0].childNodes[0].innerText).toEqual('data00');

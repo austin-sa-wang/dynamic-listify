@@ -17,7 +17,7 @@ angular
           }
         };
 
-        ListExtractionFactory.listen(addLiveSearchListToDom);
+        ListExtractionFactory.triggerWhenListReady(addLiveSearchListToDom);
       }
     };
   }]);

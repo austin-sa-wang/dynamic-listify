@@ -1,5 +1,11 @@
 'use strict';
 
+/**
+ * lsUrlExtractBar implements of the following:
+ *   - url bar
+ *   - status update bubble (Angular Bootstrap)
+ *   - url preset
+ */
 angular
   .module('lsUrlExtractBar', [
     'tableExtractionFactory',
@@ -15,6 +21,7 @@ angular
       NOT_HTTP: 'Invalid URL. Note: The url should be preceded with http(s)://'
     };
 
+    // Status update bubble view model
     this.alert = {
       show: false,
       type: '',
@@ -40,11 +47,11 @@ angular
 
     this.targetUrl = '';
 
-    // Listen to extraction completion broadcast
-    TableExtractionFactory.triggerWhenTableReady(function (event, tableCount) {
+    // Display error when no table is found on the target url
+    TableExtractionFactory.callHandlerWhenTableReady(function (event, tableCount) {
       if (tableCount === 0) {
         $timeout(function() {
-          _alert.showWarning(ALERT_MSG.NO_TABLE);
+          _alert.showError(ALERT_MSG.NO_TABLE);
         });
       }
     });
@@ -64,6 +71,7 @@ angular
       var timer = $timeout(function(){}, 1000);
 
       _alert.showWarning(ALERT_MSG.PROCESSING);
+
       TableExtractionFactory.extract(this.targetUrl)
         .success(function() {
             _alert.hide();
@@ -78,6 +86,10 @@ angular
         });
     };
 
+    /**
+     * Set target url to preset and extract
+     * @param url Extraction target url
+     */
     this.getPresetSite = function(url) {
       this.targetUrl = url;
       this.getTables();

@@ -1,5 +1,8 @@
 'use strict';
 
+/**
+ * 
+ */
 angular
   .module('tableExtractionFactory', [])
 
@@ -26,7 +29,7 @@ angular
       $rootScope.$broadcast(TableExtractionFactory.TABLE_READY_EVENT, data);
     };
 
-    TableExtractionFactory.triggerWhenTableReady = function (callback) {
+    TableExtractionFactory.callHandlerWhenTableReady = function (callback) {
       $rootScope.$on(TableExtractionFactory.TABLE_READY_EVENT, callback);
     };
 

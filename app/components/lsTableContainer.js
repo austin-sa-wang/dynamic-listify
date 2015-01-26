@@ -1,5 +1,9 @@
 'use strict';
 
+/**
+ * Container for the lsTable components
+ * Listen to tableExtractionFactory. When tables are ready, add lsTable components onto DOM
+ */
 angular
   .module('lsTableContainer', [])
 
@@ -8,16 +12,15 @@ angular
       scope: {},
       link: function (scope, element) {
         var addLiveSearchTableToDom = function (event, tableCount) {
+          // Remove existing tables
           element.empty();
-          var newTableMarkup, newTable;
+
           for (var i = 0; i < tableCount; i++) {
-            newTableMarkup = '<div ls-table table-number=\"' + i + '\"></div>';
-            newTable = $compile(newTableMarkup)(scope);
-            element.append(newTable);
+            element.append( $compile('<div ls-table table-number=\"' + i + '\"></div>')(scope) );
           }
         };
 
-        TableExtractionFactory.triggerWhenTableReady(addLiveSearchTableToDom);
+        TableExtractionFactory.callHandlerWhenTableReady(addLiveSearchTableToDom);
       }
     };
   }]);

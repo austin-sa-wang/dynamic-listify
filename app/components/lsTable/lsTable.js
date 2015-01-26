@@ -2,7 +2,7 @@
 /*global $:false */
 
 /**
- * lsTable component is consisted of the following elements:
+ * lsTable component implements of the following:
  *   - table
  *   - table search bar
  *   - table hide & show toggle
@@ -15,7 +15,7 @@ angular
     this.filterExpr = '';
 
     // hide & show toggle view model
-    this.tableToggle = {
+    this.tableDisplayToggle = {
       isTableHidden: false,
       buttonText: 'Hide',
 

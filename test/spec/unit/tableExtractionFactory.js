@@ -23,8 +23,8 @@ describe('tableExtractionFactory', function() {
     expect(TableExtractionFactory).toBeDefined();
   });
 
-  it('.triggerWhenTableReady method should subscribe to the correct event', function (done) {
-    TableExtractionFactory.triggerWhenTableReady(function (event) {
+  it('.callHandlerWhenTableReady method should subscribe to the correct event', function (done) {
+    TableExtractionFactory.callHandlerWhenTableReady(function (event) {
       expect(event.name).toEqual(EXPECTED_EVENT_NAME);
       done();
     });

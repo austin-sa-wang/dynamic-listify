@@ -25,7 +25,7 @@ angular
      * @param {string} url Target url
      * @returns {string} JSONP request url
      */
-    TableExtractionFactory.getCorsUrl = function (url) {
+    var getCorsUrl = function (url) {
       return 'http://whateverorigin.org/get?url=' + encodeURIComponent(url) + '&callback=JSON_CALLBACK';
     };
 
@@ -75,14 +75,27 @@ angular
      * @returns {Promise} promise Promise to the http request
      */
     TableExtractionFactory.extract = function (url) {
-      console.log('getting from ' + url)
-      var promise = $http.jsonp(url, {timeout: TableExtractionFactory.HTTP_REQUEST_TIMEOUT})
+      var promise = $http.jsonp(getCorsUrl(url), {timeout: TableExtractionFactory.HTTP_REQUEST_TIMEOUT})
         .success(function (data) {
           var markup = TableUtilityFactory.fixRelativeLinks(url, data.contents);
           var tableCount = TableExtractionFactory.getTables(markup);
           TableExtractionFactory.broadcastTableReady(tableCount);
         });
       return promise;
+    };
+
+    /**
+     * Extract tables from the url without cors bypass
+     * Mainly for offline demo
+     * @param {String} url Target url
+     */
+    TableExtractionFactory.extractWithoutCorsBypass = function (url) {
+      $http.get(url)
+        .success(function (data) {
+          var markup = TableUtilityFactory.fixRelativeLinks(url, data.contents);
+          var tableCount = TableExtractionFactory.getTables(markup);
+          TableExtractionFactory.broadcastTableReady(tableCount);
+        });
     };
 
     return TableExtractionFactory;

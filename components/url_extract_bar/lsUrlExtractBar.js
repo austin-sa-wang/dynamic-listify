@@ -77,8 +77,7 @@ angular
 
       _alert.showWarning(ALERT_MSG.PROCESSING);
 
-      var url = TableExtractionFactory.getCorsUrl(this.targetUrl);
-      TableExtractionFactory.extract(url)
+      TableExtractionFactory.extract(this.targetUrl)
         .success(function() {
             _alert.hide();
         })

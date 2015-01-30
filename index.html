@@ -26,11 +26,22 @@
     <h1>Live Search
       <small>Extract tables and attach search functionality</small>
     </h1>
-    <span dependency-unavailable id="dependency-alert" class="h3 text-center hidden bg-danger">This app is currently unavailable.<br> App dependency <a href="http://www.whateverorigin.org/" target="_blank">Whatever Origin</a> is offline.</span>
+
+    <span if-dependency-unavailable id="dependency-alert" class="h3 text-center  bg-danger">
+      This app is currently unavailable because a vital dependency,
+      <a href="http://www.whateverorigin.org/" target="_blank">Whatever Origin</a>, is offline.
+      <br>
+      <small>
+        <a href ng-click="getExample()">Click here</a>
+        for an offline example based on a saved
+        <a target="_blank" href="offline_resource/binding_of_issac_items.html">web page</a>.
+      </small>
+    </span>
+
     <p if-chrome class="hidden bg-info">Due to browser constraint, Chrome users may experience long UI freeze when extracting from a web page the first time.</p>
   </header>
-  <div ls-search-bar=""></div>
-  <div live-search-list-container=""></div>
+  <div ls-url-extract-bar=""></div>
+  <div ls-table-container=""></div>
 
   <div class="footer">
   	<p>Note: Though functional, this application is more suitable to be implemented as a browser plugin. The implementation would be much cleaner; The result would also be much more usable.</p>
@@ -53,7 +64,7 @@
     m.parentNode.insertBefore(a, m)
   })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
 
-  ga('create', 'UA-XXXXX-X');
+  ga('create', 'UA-56015885-3');
   ga('send', 'pageview');
 </script>
 
@@ -80,12 +91,13 @@
 
 <!-- build:js({.tmp,app}) scripts/scripts.js -->
 <script src="scripts/app.js"></script>
-<script src="components/list/liveSearchList.js"></script>
-<script src="components/list/liveSearchListContainer.js"></script>
-<script src="components/search_bar/lsSearchBar.js"></script>
-<script src="components/listExtractionFactory.js"></script>
+<script src="components/lstable/lsTable.js"></script>
+<script src="components/lsTableContainer.js"></script>
+<script src="components/url_extract_bar/lsUrlExtractBar.js"></script>
+<script src="components/tableExtractionFactory.js"></script>
 <script src="components/ifChromeDirective.js"></script>
-<script src="components/dependencyUnavailableDirective.js"></script>
+<script src="components/ifDependencyUnavailableDirective.js"></script>
+<script src="components/tableUtilityFactory.js"></script>
 <!-- endbuild -->
 </body>
 </html>

@@ -1,5 +1,8 @@
 'use strict';
 
+/**
+ * Show notification when browser is Chrome
+ */
 angular
   .module('ifChrome', [])
 

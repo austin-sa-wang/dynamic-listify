@@ -90,9 +90,10 @@ angular
      * @param {String} url Target url
      */
     TableExtractionFactory.extractWithoutCorsBypass = function (url) {
-      console.log('get' + url);
+      console.log('get ' + url);
       $http.get(url)
         .success(function (data) {
+          console.log(data);
           var markup = TableUtilityFactory.fixRelativeLinks(url, data.contents);
           var tableCount = TableExtractionFactory.getTables(markup);
           TableExtractionFactory.broadcastTableReady(tableCount);

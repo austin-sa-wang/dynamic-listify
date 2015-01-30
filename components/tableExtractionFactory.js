@@ -94,7 +94,7 @@ angular
       $http.get(url)
         .success(function (data) {
           console.log(data);
-          var markup = TableUtilityFactory.fixRelativeLinks(url, data.contents);
+          var markup = TableUtilityFactory.fixRelativeLinks(url, data);
           var tableCount = TableExtractionFactory.getTables(markup);
           TableExtractionFactory.broadcastTableReady(tableCount);
         });

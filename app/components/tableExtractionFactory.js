@@ -12,6 +12,12 @@ angular
     TableExtractionFactory.HTTP_REQUEST_TIMEOUT = 2000;
     TableExtractionFactory.MIN_TABLE_ROW_COUNT_TO_QUALITY = 10;
 
+    var isCorsDependencyOnline = true;
+
+    /**
+     * Array for lsTable component to access the extracted table markup
+     * @type {Array}
+     */
     TableExtractionFactory.tables = [];
 
     /**
@@ -19,7 +25,7 @@ angular
      * @param {string} url Target url
      * @returns {string} JSONP request url
      */
-    var corsUrl = function (url) {
+    var getCorsUrl = function (url) {
       return 'http://whateverorigin.org/get?url=' + encodeURIComponent(url) + '&callback=JSON_CALLBACK';
     };
 
@@ -69,13 +75,27 @@ angular
      * @returns {Promise} promise Promise to the http request
      */
     TableExtractionFactory.extract = function (url) {
-      var promise = $http.jsonp(corsUrl(url), {timeout: TableExtractionFactory.HTTP_REQUEST_TIMEOUT})
+      var promise = $http.jsonp(getCorsUrl(url), {timeout: TableExtractionFactory.HTTP_REQUEST_TIMEOUT})
         .success(function (data) {
           var markup = TableUtilityFactory.fixRelativeLinks(url, data.contents);
           var tableCount = TableExtractionFactory.getTables(markup);
           TableExtractionFactory.broadcastTableReady(tableCount);
         });
       return promise;
+    };
+
+    /**
+     * Extract tables from the url without cors bypass
+     * Mainly for offline demo
+     * @param {String} localResourceUrl Target url
+     */
+    TableExtractionFactory.extractWithoutCorsBypass = function (localResourceUrl, intendedUrl) {
+      $http.get(localResourceUrl)
+        .success(function (data) {
+          var markup = TableUtilityFactory.fixRelativeLinks(intendedUrl, data);
+          var tableCount = TableExtractionFactory.getTables(markup);
+          TableExtractionFactory.broadcastTableReady(tableCount);
+        });
     };
 
     return TableExtractionFactory;

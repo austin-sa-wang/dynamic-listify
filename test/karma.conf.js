@@ -31,7 +31,8 @@ module.exports = function(config) {
       'app/components/*.js',
       'app/components/**/*.js',
       'test/spec/**/*.js',
-      { pattern: 'test/fixtures/*.html', watched: false, included: false, served: true }
+      { pattern: 'test/fixtures/*.html', watched: false, included: false, served: true },
+      { pattern: 'offline_resource/*.html', watched: false, included: false, served: true }
     ],
 
     preprocessors: {},

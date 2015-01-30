@@ -92,7 +92,6 @@ angular
     TableExtractionFactory.extractWithoutCorsBypass = function (localResourceUrl, intendedUrl) {
       $http.get(localResourceUrl)
         .success(function (data) {
-          console.log(data);
           var markup = TableUtilityFactory.fixRelativeLinks(intendedUrl, data);
           var tableCount = TableExtractionFactory.getTables(markup);
           TableExtractionFactory.broadcastTableReady(tableCount);

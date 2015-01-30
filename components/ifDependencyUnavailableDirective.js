@@ -10,7 +10,7 @@ angular
   .controller('ifDependencyUnavailable', function ($scope, TableExtractionFactory) {
     $scope.getExample = function () {
       var url = 'offline_resource/binding_of_issac_items.html';
-      TableExtractionFactory.extractWithoutCorsBypass(url);
+      TableExtractionFactory.extractWithoutCorsBypass(url, 'http://bindingofisaacrebirth.gamepedia.com/Items');
     };
   })
 

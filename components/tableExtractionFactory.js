@@ -87,14 +87,13 @@ angular
     /**
      * Extract tables from the url without cors bypass
      * Mainly for offline demo
-     * @param {String} url Target url
+     * @param {String} localResourceUrl Target url
      */
-    TableExtractionFactory.extractWithoutCorsBypass = function (url) {
-      console.log('get ' + url);
-      $http.get(url)
+    TableExtractionFactory.extractWithoutCorsBypass = function (localResourceUrl, intendedUrl) {
+      $http.get(localResourceUrl)
         .success(function (data) {
           console.log(data);
-          var markup = TableUtilityFactory.fixRelativeLinks(url, data);
+          var markup = TableUtilityFactory.fixRelativeLinks(intendedUrl, data);
           var tableCount = TableExtractionFactory.getTables(markup);
           TableExtractionFactory.broadcastTableReady(tableCount);
         });

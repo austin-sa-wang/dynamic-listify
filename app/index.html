@@ -23,10 +23,21 @@
 <!-- application content -->
 <div class="container">
   <header>
+    <span if-dependency-unavailable id="dependency-alert" class="h3 text-center hidden bg-danger">
+      This app is currently unavailable because a vital dependency,
+      <a href="http://www.whateverorigin.org/" target="_blank">Whatever Origin</a>, is offline.
+      <br>
+      <small>
+        <a href ng-click="getExample()">Click here</a>
+        for a demo based on a saved
+        <a target="_blank" href="offline_resource/binding_of_issac_items.html">web page</a>.
+      </small>
+    </span>
+
     <h1>Live Search
       <small>Extract tables and attach search functionality</small>
     </h1>
-    <span if-dependency-unavailable id="dependency-alert" class="h3 text-center hidden bg-danger">This app is currently unavailable.<br> App dependency <a href="http://www.whateverorigin.org/" target="_blank">Whatever Origin</a> is offline.</span>
+
     <p if-chrome class="hidden bg-info">Due to browser constraint, Chrome users may experience long UI freeze when extracting from a web page the first time.</p>
   </header>
   <div ls-url-extract-bar=""></div>
@@ -80,7 +91,7 @@
 
 <!-- build:js({.tmp,app}) scripts/scripts.js -->
 <script src="scripts/app.js"></script>
-<script src="components/lstable/lsTable.js"></script>
+<script src="components/lsTable/lsTable.js"></script>
 <script src="components/lsTableContainer.js"></script>
 <script src="components/url_extract_bar/lsUrlExtractBar.js"></script>
 <script src="components/tableExtractionFactory.js"></script>
